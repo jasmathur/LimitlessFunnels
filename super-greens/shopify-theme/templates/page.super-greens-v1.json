@@ -1,0 +1,14 @@
+{
+  "layout": "lx-funnel",
+  "sections": {
+    "main": {
+      "type": "lx-sg-v1",
+      "settings": {
+        "product": "superfoods-super-greens-blend-gummies"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
