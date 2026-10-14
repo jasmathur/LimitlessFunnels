@@ -7,7 +7,7 @@ import { applyNZTStudioMaterials } from './studio-lighting.js';
  */
 export async function loadNZT(scene, {
   bottleUrl = './nzt48-bottle-cap.glb',
-  pillUrl = './nzt48-gold-pill.glb',
+  pillUrl = './nzt48-gold-pill-pbr.glb',
 } = {}) {
   const loader = new GLTFLoader();
   const [bottleGLTF, pillGLTF] = await Promise.all([
