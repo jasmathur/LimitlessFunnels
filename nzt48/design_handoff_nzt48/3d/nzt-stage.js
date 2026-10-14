@@ -12,6 +12,24 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const smooth = t => t * t * t * (t * (t * 6 - 15) + 10);
 const D2R = Math.PI / 180;
 
+// Keep the complete product composition inside a real illustration slot.
+// Subtract heading rectangles instead of letting the fixed canvas cross text.
+export function clearStageRects(slot, blockers) {
+  let free = [slot];
+  for (const b of blockers) {
+    free = free.flatMap(r => {
+      if (b.right <= r.left || b.left >= r.right || b.bottom <= r.top || b.top >= r.bottom) return [r];
+      return [
+        { ...r, right: Math.min(r.right, b.left) },
+        { ...r, left: Math.max(r.left, b.right) },
+        { ...r, bottom: Math.min(r.bottom, b.top) },
+        { ...r, top: Math.max(r.top, b.bottom) }
+      ].filter(x => x.right - x.left >= 100 && x.bottom - x.top >= 140);
+    }).sort((a, b) => (b.right-b.left)*(b.bottom-b.top)-(a.right-a.left)*(a.bottom-a.top)).slice(0, 12);
+  }
+  return free;
+}
+
 const VERT = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
 const FRAG = `precision highp float;
 uniform vec2 uR;uniform float uT;uniform vec3 uG;uniform float uS;uniform float uA;uniform vec4 uP;
@@ -139,6 +157,22 @@ export function mountStage(opts = {}) {
   document.body.prepend(halo);
   cleanup.push(() => halo.remove());
   let haloBoost = 0;
+  function illustrationRects() {
+    const header = document.querySelector('header')?.getBoundingClientRect();
+    const top = Math.max(16, header ? header.bottom + 16 : 16);
+    const blockers = Array.from(document.querySelectorAll('h1,h2,h3,#lx-version-switch')).flatMap(el => {
+      const r = el.getBoundingClientRect();
+      return r.width > 4 && r.height > 4 && r.bottom > top && r.top < innerHeight
+        ? [{ left:r.left-18, right:r.right+18, top:r.top-18, bottom:r.bottom+18 }] : [];
+    });
+    return Array.from(document.querySelectorAll('[data-nzt-anchor]')).flatMap(el => {
+      if (el.dataset.out) return [];
+      const r = el.getBoundingClientRect();
+      const slot = { left:Math.max(18,r.left+12), right:Math.min(innerWidth-18,r.right-12), top:Math.max(top,r.top+12), bottom:Math.min(innerHeight-24,r.bottom-12) };
+      if (slot.right-slot.left < 120 || slot.bottom-slot.top < 180) return [];
+      return clearStageRects(slot,blockers);
+    });
+  }
 
   const onPM = e => { mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; };
   addEventListener('pointermove', onPM, { passive: true });
@@ -208,10 +242,11 @@ export function mountStage(opts = {}) {
     const capBox = new THREE.Box3().setFromObject(product.cap);
     const mouthY = (capBox.min.y - ctr.y) / H;
     const capUnit = H / product.cap.parent.getWorldScale(new THREE.Vector3()).y;
+    const composition = new THREE.Group(); scene.add(composition);
     const pivot = new THREE.Group(), yawG = new THREE.Group();
-    scene.add(pivot); pivot.add(yawG); yawG.add(model); model.position.sub(ctr);
+    composition.add(pivot); pivot.add(yawG); yawG.add(model); model.position.sub(ctr);
 
-    const pillsG = new THREE.Group(); scene.add(pillsG);
+    const pillsG = new THREE.Group(); composition.add(pillsG);
     const ORBIT = [[-.64, .30, .25], [.64, .02, .32], [-.54, -.40, -.35], [.52, .46, -.42], [.10, .80, -.22], [-.80, -.08, -.6], [.74, -.46, .06]];
     const SPILL = [[-.30, .64, .18], [.02, .80, .26], [.31, .67, .12], [-.17, .95, -.06], [.25, .97, -.1], [-.47, .84, -.25], [.47, .82, -.2]];
     const pills = ORBIT.map((o, i) => {
@@ -260,9 +295,10 @@ export function mountStage(opts = {}) {
       yawG.rotation.y = c.ry + sy + seq.yawOff + (Math.sin(time * .45) * .12 * calm + mx * .2) * idle - (1 - ie) * 2.4;
       if (st >= 0) {
         const capP = smooth(clamp((st - C0) / (C1 - C0))) * (1 - smooth(clamp((st - S0) / (S1 - S0))));
-        product.setCapOpening(clamp(capP / .5));
+        // A short mechanical lift leaves room for the floating cap and pills.
+        product.setCapOpening(capP, { lift: .18 * capUnit });
         const lift = smooth(clamp((capP - .45) / .55));
-        product.cap.position.y += lift * .3 * capUnit;
+        product.cap.position.y += lift * .06 * capUnit;
         product.cap.position.x += Math.sin(time * 1.4) * .012 * capUnit * lift;
       } else product.resetCap();
       pillsG.position.copy(pivot.position); pillsG.scale.setScalar(s);
@@ -314,6 +350,60 @@ export function mountStage(opts = {}) {
       });
     }
 
+    const boundsBox = new THREE.Box3(), corner = new THREE.Vector3();
+    function projectedBounds(root = composition) {
+      composition.updateWorldMatrix(true,true);
+      let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+      const visit = object => {
+        if (!object.visible) return;
+        if (object.isMesh && object.material.opacity > .004) {
+          if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
+          boundsBox.copy(object.geometry.boundingBox);
+          for(let i=0;i<8;i++) {
+            corner.set(i&1?boundsBox.max.x:boundsBox.min.x,i&2?boundsBox.max.y:boundsBox.min.y,i&4?boundsBox.max.z:boundsBox.min.z);
+            corner.applyMatrix4(object.matrixWorld).project(camera);
+            const x=(corner.x+1)*innerWidth/2,y=(1-corner.y)*innerHeight/2;
+            left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);
+          }
+        }
+        for(const child of object.children)visit(child);
+      };
+      visit(root);
+      return {left,right,top,bottom};
+    }
+    let fittedScale = 1;
+    function keepCompositionClear(c) {
+      composition.visible=true;composition.position.set(0,0,0);composition.scale.setScalar(1);
+      const rects=illustrationRects();
+      if (!rects.length) { composition.visible=false;shadow.visible=false;canvas.dataset.nztLayout='hidden';return; }
+      const raw=projectedBounds(),rw=raw.right-raw.left,rh=raw.bottom-raw.top;
+      if(!Number.isFinite(rw+rh)||rw<=0||rh<=0)return;
+      const score=r=>Math.hypot((r.left+r.right)/2-c.x,(r.top+r.bottom)/2-c.y)-Math.min(1,(r.right-r.left)/rw,(r.bottom-r.top)/rh)*100;
+      const slot=rects.reduce((best,r)=>score(r)<score(best)?r:best,rects[0]);
+      const wanted=Math.min(1,(slot.right-slot.left)/rw,(slot.bottom-slot.top)/rh)*.96;
+      // Shrink immediately for safety; ease the size back up as space returns.
+      fittedScale=wanted<fittedScale?wanted:lerp(fittedScale,wanted,.06);
+      composition.scale.setScalar(fittedScale);
+      composition.position.copy(pivot.position).multiplyScalar(1-fittedScale);
+      const k=2*4*Math.tan(10*D2R)/innerHeight;
+      // Correct against the actual perspective projection, including cap lift,
+      // capsule depth and every animated transform rather than just bottle size.
+      for(let pass=0;pass<4;pass++) {
+        const b=projectedBounds();
+        const dx=clamp(0,slot.left-b.left,slot.right-b.right);
+        const dy=clamp(0,slot.top-b.top,slot.bottom-b.bottom);
+        composition.position.x+=dx*k;composition.position.y-=dy*k;
+      }
+      const b=projectedBounds();
+      const safe=b.left>=slot.left-1&&b.right<=slot.right+1&&b.top>=slot.top-1&&b.bottom<=slot.bottom+1;
+      // Do not expose a clipped model during an abrupt resize or anchor change.
+      composition.visible=safe;shadow.visible=false;
+      canvas.dataset.nztLayout=safe?'clear':'hidden';
+      canvas.dataset.nztBounds=JSON.stringify(b);
+      canvas.dataset.nztSlot=JSON.stringify(slot);
+      canvas.dataset.nztCapBounds=JSON.stringify(projectedBounds(product.cap));
+    }
+
     // Product still for bundle cards and cart, rendered from the same model and lighting.
     function still() {
       const w = 480, h = 720;
@@ -342,6 +432,7 @@ export function mountStage(opts = {}) {
       draw(c, time) {
         const ie = reduced ? 1 : smooth(clamp((performance.now() - born) / 1900));
         pose(c, time, ie);
+        keepCompositionClear(c);
         renderer.render(scene, camera);
       }
     };
