@@ -6,7 +6,6 @@ import * as THREE from './vendor/three.module.min.js';
 import { setupNZTStudio } from './studio-lighting.js';
 import { loadNZT } from './nzt-model.js';
 import { setupGoldStudio } from './gold-studio.js';
-import { GLTFLoader } from './vendor/addons/loaders/GLTFLoader.js';
 
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lerp = (a, b, t) => a + (b - a) * t;
@@ -185,20 +184,21 @@ export function mountStage(opts = {}) {
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false, toneMapped: false }));
     shadow.renderOrder = -1; scene.add(shadow);
     cleanup.push(() => { shadow.geometry.dispose(); shadow.material.dispose(); shadowTex.dispose(); }); camera.lookAt(0, 0, 0);
-    const product = await loadNZT(scene, { bottleUrl: base + 'nzt48-bottle-cap.glb', pillUrl: base + 'nzt48-gold-pill.glb' });
-    const goldGLTF = await new GLTFLoader().loadAsync(base + 'nzt48-gold-pill-pbr.glb');
+    const product = await loadNZT(scene, { bottleUrl: base + 'nzt48-bottle-cap.glb', pillUrl: base + 'nzt48-gold-pill-pbr.glb' });
     if (!alive) { product.dispose(); studio.dispose(); renderer.dispose(); return null; }
     const bottleEnv = scene.environment;
     const goldStudio = setupGoldStudio(renderer, scene);
     scene.environment = bottleEnv;
     renderer.toneMappingExposure = 1.0;
     cleanup.push(() => goldStudio.dispose());
-    // Match the PBR pill to the old pill's size so layout ratios stay the same.
-    const oldPill = product.createPill(scene), oldLen = new THREE.Box3().setFromObject(oldPill).getSize(new THREE.Vector3()).x;
-    scene.remove(oldPill);
-    const goldTpl = goldGLTF.scene, goldLen = new THREE.Box3().setFromObject(goldTpl).getSize(new THREE.Vector3()).x;
-    const goldScale = goldLen > 0 && oldLen > 0 ? oldLen / goldLen : 1;
-    const makePill = parent => { const holder = new THREE.Group(), inner = goldTpl.clone(true); inner.scale.setScalar(goldScale); holder.add(inner); parent.add(holder); return holder; };
+    // The approved PBR capsule already contains the doubled dimensions in meters.
+    // Clone the loader's single template; no baked capsule or second GLB request.
+    const makePill = parent => {
+      const holder = new THREE.Group();
+      product.createPill(holder);
+      parent.add(holder);
+      return holder;
+    };
 
     const model = product.model;
     model.rotation.set(0, 0, 0); product.resetCap();
