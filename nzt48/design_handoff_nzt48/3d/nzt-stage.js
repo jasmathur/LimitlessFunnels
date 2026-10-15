@@ -12,22 +12,9 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const smooth = t => t * t * t * (t * (t * 6 - 15) + 10);
 const D2R = Math.PI / 180;
 
-// Keep the complete product composition inside a real illustration slot.
-// Subtract heading rectangles instead of letting the fixed canvas cross text.
-export function clearStageRects(slot, blockers) {
-  let free = [slot];
-  for (const b of blockers) {
-    free = free.flatMap(r => {
-      if (b.right <= r.left || b.left >= r.right || b.bottom <= r.top || b.top >= r.bottom) return [r];
-      return [
-        { ...r, right: Math.min(r.right, b.left) },
-        { ...r, left: Math.max(r.left, b.right) },
-        { ...r, bottom: Math.min(r.bottom, b.top) },
-        { ...r, top: Math.max(r.top, b.bottom) }
-      ].filter(x => x.right - x.left >= 100 && x.bottom - x.top >= 140);
-    }).sort((a, b) => (b.right-b.left)*(b.bottom-b.top)-(a.right-a.left)*(a.bottom-a.top)).slice(0, 12);
-  }
-  return free;
+// One physical scale per viewport. Scroll changes position and orientation only.
+export function stageBottleHeight(width, height) {
+  return Math.min(360, height * .39, width * (width < 820 ? .43 : .27));
 }
 
 const VERT = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
@@ -116,22 +103,22 @@ function setupReveal(cleanup) {
   cleanup.push(() => { clearInterval(iv); io.disconnect(); });
 }
 
-function readAnchors(aspect) {
+function readAnchors() {
   const out = [], vc = innerHeight / 2;
   for (const el of document.querySelectorAll('[data-nzt-anchor]')) {
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) continue;
-    const d = el.dataset, fit = d.fit ? +d.fit : .86;
-    const h = Math.min(r.height * fit, (r.width * fit) / aspect);
+    const d = el.dataset;
+    const h = stageBottleHeight(innerWidth, innerHeight);
     let ry = (+d.ry || 0) * D2R;
     if (d.scrub) {
       const p = el.parentElement.getBoundingClientRect();
       ry += (+d.scrub) * D2R * clamp((vc - p.top - r.height / 2) / Math.max(1, p.height - r.height));
     }
     out.push({
-      cx: d.out === 'right' ? innerWidth + h * .7 : r.left + r.width / 2,
+      cx: d.out === 'right' ? innerWidth + h * .95 : r.left + r.width / 2,
       cy: r.top + r.height / 2, top: r.top + scrollY, h, ry,
-      tilt: (+d.tilt || 0) * D2R, open: +d.open || 0, pills: +d.pills || 0, solo: +d.solo || 0, arm: d.bottling === '1' ? 1 : 0, bottle: d.bottle === '0' || d.out ? 0 : 1, glow: d.out ? 0 : 1
+      tilt: (+d.tilt || 0) * D2R, open: +d.open || 0, pills: +d.pills || 0, solo: +d.solo || 0, arm: d.bottling === '1' ? 1 : 0, bottle: 1, glow: 1
     });
   }
   return out.sort((a, b) => a.top - b.top);
@@ -157,22 +144,6 @@ export function mountStage(opts = {}) {
   document.body.prepend(halo);
   cleanup.push(() => halo.remove());
   let haloBoost = 0;
-  function illustrationRects() {
-    const header = document.querySelector('header')?.getBoundingClientRect();
-    const top = Math.max(16, header ? header.bottom + 16 : 16);
-    const blockers = Array.from(document.querySelectorAll('h1,h2,h3,#lx-version-switch')).flatMap(el => {
-      const r = el.getBoundingClientRect();
-      return r.width > 4 && r.height > 4 && r.bottom > top && r.top < innerHeight
-        ? [{ left:r.left-18, right:r.right+18, top:r.top-18, bottom:r.bottom+18 }] : [];
-    });
-    return Array.from(document.querySelectorAll('[data-nzt-anchor]')).flatMap(el => {
-      if (el.dataset.out) return [];
-      const r = el.getBoundingClientRect();
-      const slot = { left:Math.max(18,r.left+12), right:Math.min(innerWidth-18,r.right-12), top:Math.max(top,r.top+12), bottom:Math.min(innerHeight-24,r.bottom-12) };
-      if (slot.right-slot.left < 120 || slot.bottom-slot.top < 180) return [];
-      return clearStageRects(slot,blockers);
-    });
-  }
 
   const onPM = e => { mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; };
   addEventListener('pointermove', onPM, { passive: true });
@@ -184,7 +155,7 @@ export function mountStage(opts = {}) {
   const cur = { x: innerWidth * .72, y: innerHeight * .5, h: innerHeight * .6, ry: 0, tilt: 0, open: 0, pills: 0, solo: 0, arm: 0, bottle: 1, glow: 1 };
 
   function target() {
-    const A = readAnchors(aspect);
+    const A = readAnchors();
     if (!A.length) return null;
     const vc = innerHeight / 2, L = A[A.length - 1];
     let a = A[0], b = A[0], t = 0;
@@ -195,14 +166,19 @@ export function mountStage(opts = {}) {
     const e = smooth(clamp((t - .14) / .72));
     const o = {};
     for (const k of ['h', 'ry', 'tilt', 'open', 'pills', 'solo', 'arm', 'bottle', 'glow']) o[k] = lerp(a[k], b[k], e);
-    o.x = lerp(a.cx, b.cx, e); o.y = lerp(a.cy, b.cy, e);
+    o.h = stageBottleHeight(innerWidth, innerHeight);
+    const headerBottom = document.querySelector('header')?.getBoundingClientRect().bottom || 72;
+    o.x = lerp(a.cx, b.cx, e);
+    // Reserve the full cap-open envelope before the animation starts. Never
+    // resize the bottle to fit a section. Dense content has a smooth side exit.
+    o.y = clamp(lerp(a.cy, b.cy, e), headerBottom + 24 + o.h * (.56 + .24 * o.arm), innerHeight - 28 - o.h * .57);
     return api.force ? Object.assign(o, api.force) : o;
   }
 
   async function initThree() {
     const canvas = document.createElement('canvas');
     canvas.setAttribute('aria-hidden', 'true');
-    Object.assign(canvas.style, { position: 'fixed', inset: '0', width: '100%', height: '100%', zIndex: '3', pointerEvents: 'none', opacity: '0', transition: 'opacity 1.2s ease' });
+    Object.assign(canvas.style, { position: 'fixed', inset: '0', width: '100%', height: '100%', zIndex: '3', pointerEvents: 'none', opacity: '1' });
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: true });
     renderer.physicallyCorrectLights = true;
     renderer.setClearColor(0x000000, 0);
@@ -267,7 +243,7 @@ export function mountStage(opts = {}) {
     const seq = { t0: -1, yawOff: 0, lastYaw: 0 };
     function pose(c, time, ie) {
       const vh = 2 * 4 * Math.tan(10 * D2R), k = vh / innerHeight;
-      const s = c.h * k / H;
+      const s = stageBottleHeight(innerWidth, innerHeight) * k / H;
       const open = 0;
       const idle = reduced ? 0 : 1;
       const dt = Math.min(.05, Math.max(0, time - lastT)); lastT = time;
@@ -280,8 +256,8 @@ export function mountStage(opts = {}) {
       const tilt = c.tilt * (st >= 0 ? 1 - smooth(clamp(st / 1.1)) : 1);
       const seal = st >= 0 ? Math.exp(-Math.pow((st - S1) / .14, 2)) : 0;
       const bob = Math.sin(time * .9) * c.h * .012 * idle * calm - seal * c.h * .012;
-      pivot.position.set((c.x - innerWidth / 2) * k, -(c.y - innerHeight / 2) * k + bob * k + (1 - ie) * c.h * .3 * k, 0);
-      pivot.scale.setScalar(s * (.86 + .14 * ie));
+      pivot.position.set((c.x - innerWidth / 2) * k, -(c.y - innerHeight / 2) * k + bob * k, 0);
+      pivot.scale.setScalar(s);
       pivot.rotation.set(my * .06 * idle + .04, 0, tilt + Math.sin(time * .6) * .018 * idle * calm);
       shadow.position.set(pivot.position.x + Math.sin(pivot.rotation.z) * .1, pivot.position.y - H * s * .54 - bob * k * .5, -.05);
       shadow.scale.set(H * s * .9, H * s * .26, 1);
@@ -292,7 +268,7 @@ export function mountStage(opts = {}) {
         sy = -.55 * smooth(clamp((st - 1) / 3.3)) - TAU * easeOut(clamp((st - SP0) / (SP1 - SP0))) - .32 * (d < 1 ? d * d / 2 : d - .5);
         seq.lastYaw = sy;
       }
-      yawG.rotation.y = c.ry + sy + seq.yawOff + (Math.sin(time * .45) * .12 * calm + mx * .2) * idle - (1 - ie) * 2.4;
+      yawG.rotation.y = c.ry + sy + seq.yawOff + (Math.sin(time * .45) * .12 * calm + mx * .2) * idle;
       if (st >= 0) {
         const capP = smooth(clamp((st - C0) / (C1 - C0))) * (1 - smooth(clamp((st - S0) / (S1 - S0))));
         // A short mechanical lift leaves room for the floating cap and pills.
@@ -350,60 +326,6 @@ export function mountStage(opts = {}) {
       });
     }
 
-    const boundsBox = new THREE.Box3(), corner = new THREE.Vector3();
-    function projectedBounds(root = composition) {
-      composition.updateWorldMatrix(true,true);
-      let left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
-      const visit = object => {
-        if (!object.visible) return;
-        if (object.isMesh && object.material.opacity > .004) {
-          if (!object.geometry.boundingBox) object.geometry.computeBoundingBox();
-          boundsBox.copy(object.geometry.boundingBox);
-          for(let i=0;i<8;i++) {
-            corner.set(i&1?boundsBox.max.x:boundsBox.min.x,i&2?boundsBox.max.y:boundsBox.min.y,i&4?boundsBox.max.z:boundsBox.min.z);
-            corner.applyMatrix4(object.matrixWorld).project(camera);
-            const x=(corner.x+1)*innerWidth/2,y=(1-corner.y)*innerHeight/2;
-            left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);
-          }
-        }
-        for(const child of object.children)visit(child);
-      };
-      visit(root);
-      return {left,right,top,bottom};
-    }
-    let fittedScale = 1;
-    function keepCompositionClear(c) {
-      composition.visible=true;composition.position.set(0,0,0);composition.scale.setScalar(1);
-      const rects=illustrationRects();
-      if (!rects.length) { composition.visible=false;shadow.visible=false;canvas.dataset.nztLayout='hidden';return; }
-      const raw=projectedBounds(),rw=raw.right-raw.left,rh=raw.bottom-raw.top;
-      if(!Number.isFinite(rw+rh)||rw<=0||rh<=0)return;
-      const score=r=>Math.hypot((r.left+r.right)/2-c.x,(r.top+r.bottom)/2-c.y)-Math.min(1,(r.right-r.left)/rw,(r.bottom-r.top)/rh)*100;
-      const slot=rects.reduce((best,r)=>score(r)<score(best)?r:best,rects[0]);
-      const wanted=Math.min(1,(slot.right-slot.left)/rw,(slot.bottom-slot.top)/rh)*.96;
-      // Shrink immediately for safety; ease the size back up as space returns.
-      fittedScale=wanted<fittedScale?wanted:lerp(fittedScale,wanted,.06);
-      composition.scale.setScalar(fittedScale);
-      composition.position.copy(pivot.position).multiplyScalar(1-fittedScale);
-      const k=2*4*Math.tan(10*D2R)/innerHeight;
-      // Correct against the actual perspective projection, including cap lift,
-      // capsule depth and every animated transform rather than just bottle size.
-      for(let pass=0;pass<4;pass++) {
-        const b=projectedBounds();
-        const dx=clamp(0,slot.left-b.left,slot.right-b.right);
-        const dy=clamp(0,slot.top-b.top,slot.bottom-b.bottom);
-        composition.position.x+=dx*k;composition.position.y-=dy*k;
-      }
-      const b=projectedBounds();
-      const safe=b.left>=slot.left-1&&b.right<=slot.right+1&&b.top>=slot.top-1&&b.bottom<=slot.bottom+1;
-      // Do not expose a clipped model during an abrupt resize or anchor change.
-      composition.visible=safe;shadow.visible=false;
-      canvas.dataset.nztLayout=safe?'clear':'hidden';
-      canvas.dataset.nztBounds=JSON.stringify(b);
-      canvas.dataset.nztSlot=JSON.stringify(slot);
-      canvas.dataset.nztCapBounds=JSON.stringify(projectedBounds(product.cap));
-    }
-
     // Product still for bundle cards and cart, rendered from the same model and lighting.
     function still() {
       const w = 480, h = 720;
@@ -424,15 +346,16 @@ export function mountStage(opts = {}) {
     }
     try { window.__nztStill = still(); window.dispatchEvent(new Event('nzt-still')); } catch (e) { console.warn(e); }
     document.body.appendChild(canvas);
-    requestAnimationFrame(() => { canvas.style.opacity = '1'; });
-    const born = performance.now();
+
     cleanup.push(() => { canvas.remove(); product.dispose(); studio.dispose(); renderer.dispose(); });
     return {
       resize,
       draw(c, time) {
-        const ie = reduced ? 1 : smooth(clamp((performance.now() - born) / 1900));
-        pose(c, time, ie);
-        keepCompositionClear(c);
+        pose(c, time, 1);
+        // The same composition stays visible and keeps its physical scale.
+        canvas.dataset.nztMotion = 'continuous';
+        canvas.dataset.nztBottleScale = String(pivot.scale.x);
+        canvas.dataset.nztBottleYaw = String(yawG.rotation.y);
         renderer.render(scene, camera);
       }
     };
