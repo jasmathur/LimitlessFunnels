@@ -248,7 +248,7 @@ footer a,footer p{display:block;margin:0 0 9px;font:400 13px/1.6 Inter;color:var
 footer a:hover{color:var(--text)}
 footer .legal{grid-column:1/-1;font-size:12px;max-width:120ch}
 footer .wm{height:24px;width:auto;margin-bottom:16px}
-footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;height:auto;margin:10px auto 0;padding-bottom:clamp(90px,8vw,120px)}
+footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;height:auto;margin:10px auto clamp(90px,8vw,120px);-webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.35) 55%,transparent 100%);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.35) 55%,transparent 100%)}
 
 /* Toast */
 #toast{position:fixed;left:50%;bottom:24px;z-index:130;display:flex;align-items:center;gap:16px;padding:10px 10px 10px 20px;border-radius:22px;background:#201C16;box-shadow:0 24px 50px -16px rgba(0,0,0,.85),inset 0 0 0 1px var(--line2);transform:translate(-50%,calc(100% + 140px));visibility:hidden;transition:transform .55s var(--ease),visibility 0s .55s;max-width:calc(100vw - 32px)}
