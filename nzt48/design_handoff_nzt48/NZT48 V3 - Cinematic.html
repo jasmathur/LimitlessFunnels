@@ -87,11 +87,11 @@ header .logo{height:22px;width:auto;filter:invert(1) brightness(1.4)}
 .card .size{font-size:clamp(22px,2.4vw,34px)}
 
 /* Podium */
-.podium{position:relative;min-height:130vh;padding:14vh var(--pad) 0}
-.podium h2{margin:0;font-size:clamp(28px,4vw,70px);max-width:13ch;position:relative;z-index:25}
-.podium .anchor{position:absolute;left:50%;top:30vh;width:min(70vw,900px);height:90vh;transform:translateX(-50%)}
-.podium .chip{position:absolute;z-index:25;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:var(--gold);color:var(--bg);font:400 11px/1.3 Boldonse,sans-serif;letter-spacing:0;box-shadow:0 14px 30px -12px rgba(242,179,34,.6);animation:float 5s ease-in-out infinite}
-.podium .cta{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);z-index:25}
+.podium{position:relative;height:100svh;min-height:640px;overflow:hidden;padding:clamp(96px,13vh,140px) var(--pad) 0;background:radial-gradient(42% 46% at 50% 56%,rgba(242,179,34,.16),transparent 70%)}
+.podium h2{margin:0 auto;font-size:clamp(26px,3.4vw,58px);max-width:18ch;text-align:center;position:relative;z-index:25}
+.podium .anchor{position:absolute;left:50%;top:26%;width:min(60vw,760px);height:52%;transform:translateX(-50%)}
+.podium .chip{position:absolute;left:0;top:0;z-index:25;white-space:nowrap;padding:clamp(14px,1.3vw,20px) clamp(22px,2.2vw,34px);border-radius:999px;background:var(--gold);color:var(--bg);font:400 clamp(15px,1.55vw,26px)/1.2 Boldonse,sans-serif;box-shadow:0 22px 40px -16px rgba(242,179,34,.65);will-change:transform}
+.podium .cta{position:absolute;left:50%;bottom:6vh;transform:translateX(-50%);z-index:25}
 
 /* Use cases */
 .uses{padding:12vh 0}
@@ -108,7 +108,7 @@ header .logo{height:22px;width:auto;filter:invert(1) brightness(1.4)}
 /* Standards wall */
 .wall{position:relative;padding:16vh 0 18vh;overflow:hidden}
 .wall .anchor{position:sticky;top:20vh;height:60vh;width:60vh;max-width:80vw;margin:0 auto -60vh}
-.wall .row{font-size:clamp(40px,7.2vw,138px);padding:0 var(--pad);background-image:linear-gradient(90deg,var(--gold) 0 50%,#1F1C17 50% 100%);background-size:200% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent}
+.wall .row{font-size:clamp(40px,7.2vw,138px);padding:.2em var(--pad);margin:-.2em 0;position:relative;background-image:linear-gradient(90deg,var(--gold) 0 50%,#1F1C17 50% 100%);background-size:200% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;color:transparent}
 .wall .r{text-align:right}
 
 /* Video grid */
@@ -163,7 +163,7 @@ footer .wm{width:180px;height:auto;margin-bottom:16px}
   .use .media{height:78vh}.use .mini{left:50%;top:6%;bottom:auto;transform:translateX(-50%);height:50%;max-width:84%}.use .text{left:6%;right:6%;bottom:5%;text-align:center;max-width:none}
   .vgrid{grid-template-columns:repeat(2,1fr)}
   #menu{grid-template-columns:1fr;gap:32px;align-content:center}#menu .mark{display:none}#menu .side{justify-self:start;text-align:left}
-  .podium .anchor{width:100vw;top:34vh;height:58vh}.podium{min-height:110vh}
+  .podium .anchor{width:100vw;top:28%;height:44%}
   header .shop span{padding:0 10px;font-size:13px}
   .hicons .icon{display:none}
 }
@@ -233,9 +233,9 @@ footer .wm{width:180px;height:auto;margin-bottom:16px}
   <section class="podium" id="capsule" data-section="capsule">
     <h2 class="bebas">One capsule is the whole serving.</h2>
     <div class="anchor" data-3d="podium"></div>
-    <span class="chip" style="left:16%;top:62vh">750mg NZT-48™ Blend</span>
-    <span class="chip" style="right:14%;top:52vh;animation-delay:-1.6s">23 Ingredients</span>
-    <span class="chip" style="right:22%;top:86vh;animation-delay:-3s">Contains caffeine</span>
+    <span class="chip">750mg NZT-48™ Blend</span>
+    <span class="chip">23 Ingredients</span>
+    <span class="chip">Contains caffeine</span>
     <a class="shop cta" href="#shop" data-scroll><span>Pick your size</span><i><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></i></a>
   </section>
 
@@ -441,12 +441,7 @@ loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap.glb', pillUrl: './3d/nzt48-go
     if (a.type === 'bottles') {
       for (let i = 0; i < a.n; i++) { const b = bottleUnit(); const d = i - (a.n - 1) / 2; b.position.set(d * .4, 0, -Math.abs(d) * .2); b.rotation.y = d * .25; b.scale.multiplyScalar(a.n === 1 ? .82 : .72); a.root.add(b); }
     } else if (a.type === 'podium') {
-      const mat = new THREE.MeshStandardMaterial({ color: 0x1a1814, roughness: .55, metalness: .3, envMapIntensity: .6 });
-      const tiers = [[1.5, .16, 1], [1.1, .16, .8], [.72, .16, .6]];
-      let y = -.55; tiers.forEach(([w, h, d]) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.y = y; y += h; a.root.add(m); });
-      const rim = new THREE.Mesh(new THREE.BoxGeometry(.74, .012, .62), new THREE.MeshBasicMaterial({ color: 0xF2B322 })); rim.position.y = y - .155; a.root.add(rim);
-      const b = bottleUnit(); b.scale.multiplyScalar(.62); b.position.y = y + .27; a.root.add(b); a.hero = b;
-      if (pillTemplate) for (let i = 0; i < 5; i++) { const p = unitize(pillTemplate.clone(true)); p.scale.multiplyScalar(.13); p.userData.o = { r: .62 + i * .07, s: .35 + i * .07, ph: i * 1.3, y: .05 + (i % 3) * .14 }; a.root.add(p); (a.pills ||= []).push(p); }
+      const b = bottleUnit(); b.scale.multiplyScalar(.78); a.root.add(b); a.hero = b;
       const spot = new THREE.SpotLight(0xffd27a, 18, 6, .5, .6); spot.position.set(0, 2.2, 1.2); spot.target = b; a.root.add(spot);
     } else if (a.type === 'pill' && pillTemplate) {
       const p = unitize(pillTemplate.clone(true)); p.scale.multiplyScalar(.85); a.root.add(p); a.hero = p;
@@ -462,6 +457,17 @@ function clipRect(a) { // visible part of the anchor's container; stacked cards 
   const next = cardEls[cardEls.indexOf(box) + 1];
   if (box.classList.contains('card') && next) bottom = Math.min(bottom, next.getBoundingClientRect().top);
   return { left: Math.max(r.left, 0), right: Math.min(r.right, W), top, bottom };
+}
+const podium = document.querySelector('.podium'), podAnchor = podium.querySelector('.anchor'), chips = [...podium.querySelectorAll('.chip')];
+function orbitChips(t) {
+  const pr = podium.getBoundingClientRect(); if (pr.bottom < 0 || pr.top > H) return;
+  const ar = podAnchor.getBoundingClientRect(), cx = ar.left - pr.left + ar.width / 2, cy = ar.top - pr.top + ar.height * .52;
+  const rx = Math.min(W * (W < 860 ? .36 : .3), 520), ry = ar.height * .3;
+  chips.forEach((c, i) => {
+    const ang = t * .45 + i * Math.PI * 2 / chips.length, z = Math.sin(ang), sc = .78 + .22 * (z + 1) / 2;
+    c.style.transform = 'translate(' + (cx + Math.cos(ang) * rx - c.offsetWidth / 2) + 'px,' + (cy - z * ry - c.offsetHeight / 2) + 'px) scale(' + sc.toFixed(3) + ')';
+    c.style.zIndex = z < 0 ? 15 : 25; c.style.opacity = (z < 0 ? .55 + .45 * (1 + z) : 1).toFixed(3);
+  });
 }
 renderer.autoClear = false;
 const clock = new THREE.Clock();
@@ -483,9 +489,8 @@ gsap.ticker.add(() => {
     const prog = 1 - (r.top + r.height / 2) / (H + r.height); // 0 entering, 1 leaving
     if (a.type === 'bottles') a.root.rotation.set(.08, (reduce ? 0 : t * .35) + prog * 2.4 + a.spin, 0);
     if (a.type === 'podium') {
-      a.root.rotation.y = -.5 + prog * 1.0; a.root.rotation.x = .12;
+      a.root.rotation.set(.1, -.5 + prog * 1.0, 0);
       if (a.hero) a.hero.rotation.y = reduce ? 0 : t * .5;
-      (a.pills || []).forEach(p => { const o = p.userData.o, ang = o.ph + (reduce ? 0 : t * o.s); p.position.set(Math.cos(ang) * o.r, o.y + Math.sin(t * .8 + o.ph) * .03, Math.sin(ang) * o.r); p.rotation.set(ang, ang * .7, .4); });
     }
     if (a.type === 'pill' && a.hero) a.hero.rotation.set(prog * 5 + .6, prog * 7 + (reduce ? 0 : t * .2), .6);
     // Stacked cards: as the next card slides over, this card's bottles dim and sink with it
@@ -504,6 +509,7 @@ gsap.ticker.add(() => {
     renderer.render(scene, camera);
     a.root.visible = false;
   }
+  orbitChips(reduce ? 0 : t);
   canvas.style.visibility = any ? 'visible' : 'hidden';
 });
 </script>
