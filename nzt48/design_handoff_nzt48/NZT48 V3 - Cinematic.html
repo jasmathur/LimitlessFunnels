@@ -179,7 +179,7 @@ header .btn .arw{width:30px;height:30px}
 /* Carousel (auto-scroll, pauses on hover) + lightbox */
 .chead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 .cnav{display:flex;gap:8px}
-.track{display:flex;gap:28px;overflow-x:auto;padding:40px var(--pad) 8px;margin:0 calc(var(--pad) * -1);scrollbar-width:none;cursor:grab}
+.track{display:flex;gap:28px;overflow-x:auto;width:100vw;margin-left:calc(50% - 50vw);padding:40px 0 8px max(var(--pad),calc(50vw - 720px + var(--pad)));scrollbar-width:none;cursor:grab}
 .track::-webkit-scrollbar{display:none}
 .track.drag{cursor:grabbing}
 .track.drag .day{pointer-events:none}
