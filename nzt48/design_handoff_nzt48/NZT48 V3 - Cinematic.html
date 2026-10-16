@@ -184,12 +184,11 @@ header .btn .arw{width:30px;height:30px}
 /* Carousel (auto-scroll, pauses on hover) + lightbox */
 .chead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap}
 .cnav{display:flex;gap:8px}
-.track{display:flex;gap:28px;overflow-x:auto;width:100vw;margin-left:calc(50% - 50vw);padding:40px 0 8px max(var(--pad),calc(50vw - 720px + var(--pad)));scrollbar-width:none;cursor:grab}
-.track::-webkit-scrollbar{display:none}
+.track{position:relative;overflow:hidden;width:100vw;margin-left:calc(50% - 50vw);margin-top:36px;cursor:grab;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .track.drag{cursor:grabbing}
 .track.drag .day{pointer-events:none}
-.day{flex:none;width:clamp(260px,24vw,360px);aspect-ratio:3/4;border-radius:24px;overflow:hidden;position:relative;border:0;padding:0;background:var(--panel);cursor:pointer;text-align:left}
-.day img{width:100%;height:100%;object-fit:cover;filter:brightness(.78) saturate(.9);transition:transform 1s var(--ease),filter .4s}
+.day{position:absolute;left:0;top:0;width:clamp(260px,24vw,360px);aspect-ratio:3/4;border-radius:24px;overflow:hidden;will-change:transform;border:0;padding:0;background:var(--panel);cursor:pointer;text-align:left}
+.day img{width:118%;height:100%;margin-left:-9%;object-fit:cover;will-change:transform;filter:brightness(.78) saturate(.9);transition:transform 1s var(--ease),filter .4s}
 .day:hover img{transform:scale(1.05);filter:brightness(.9)}
 .day::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,9,8,0) 45%,rgba(10,9,8,.92))}
 .day .cap{position:absolute;left:24px;right:24px;bottom:24px;z-index:1;display:flex;flex-direction:column;gap:8px}
@@ -703,29 +702,71 @@ addEventListener('resize', rail); requestAnimationFrame(rail); document.fonts &&
 steps.forEach((s, i) => s.onclick = () => pickStep(i));
 $('.stepper').addEventListener('keydown', e => { if (!/Arrow(Up|Down)/.test(e.key)) return; e.preventDefault(); const i = steps.findIndex(s => s.getAttribute('aria-selected') === 'true'), n = (i + (e.key === 'ArrowDown' ? 1 : 2)) % 3; pickStep(n); steps[n].focus(); });
 
-/* ---------- Carousel: drifts on its own, stops on hover; drag + arrows; lightbox ---------- */
+/* ---------- Carousel: endless GSAP-driven loop. Drift when idle, throw with momentum, S-curve for arrows ---------- */
 const PICS = ['m-reading', 'm-pack', 'm-shoulder', 'm-catch', 'm-training', 'm-match', 'l-kitchen', 'm-pushup'];
 const days = D.scenarios.map((u, i) => Object.assign({ img: `assets/photos/${PICS[i]}.webp` }, u));
-const card = (u, i, clone) => `<button class="day" data-i="${i}" ${clone ? 'aria-hidden="true" tabindex="-1"' : `aria-label="${u.t}: open"`}><img src="${u.img}" alt="${clone ? '' : u.t + ' with NZT48 Original'}" loading="lazy" draggable="false"><span class="open" aria-hidden="true"><svg width="14" height="14"><use href="#arw"/></svg></span><span class="cap"><em>${u.who}</em><b>${u.t}</b></span></button>`;
 const track = $('#track');
-track.innerHTML = days.map((u, i) => card(u, i)).join('') + days.map((u, i) => card(u, i, true)).join(''); // second set loops the drift seamlessly
-const stepW = () => track.firstElementChild.offsetWidth + 28, half = () => track.scrollWidth / 2;
-let paused = false, hold = 0;
-track.addEventListener('mouseenter', () => paused = true); track.addEventListener('mouseleave', () => paused = false);
-track.addEventListener('focusin', () => paused = true); track.addEventListener('focusout', () => paused = false);
-const nudge = d => { hold = performance.now() + 1400; track.scrollBy({ left: d * stepW(), behavior: 'smooth' }); };
-$('#cprev').onclick = () => { if (track.scrollLeft < stepW()) track.scrollLeft += half(); nudge(-1); };
-$('#cnext').onclick = () => nudge(1);
-let dx0 = null, sx0 = 0, moved = 0;
-track.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; dx0 = e.clientX; sx0 = track.scrollLeft; moved = 0; });
-addEventListener('pointermove', e => { if (dx0 === null) return; moved = Math.abs(e.clientX - dx0); if (moved > 4) track.classList.add('drag'); track.scrollLeft = sx0 - (e.clientX - dx0); });
-addEventListener('pointerup', () => { if (dx0 === null) return; dx0 = null; track.classList.remove('drag'); hold = performance.now() + 800; });
-gsap.ticker.add(() => {
-  if (track.scrollLeft >= half()) track.scrollLeft -= half();
-  if (reduce || paused || dx0 !== null || performance.now() < hold) return;
-  const r = track.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
-  track.scrollLeft += .7;
+track.innerHTML = days.map((u, i) => `<button class="day" data-i="${i}" aria-label="${u.t}: open"><img src="${u.img}" alt="${u.t} with NZT48 Original" loading="lazy" draggable="false"><span class="open" aria-hidden="true"><svg width="14" height="14"><use href="#arw"/></svg></span><span class="cap"><em>${u.who}</em><b>${u.t}</b></span></button>`).join('');
+const cards = $$('.day', track), imgs = cards.map(c => $('img', c));
+const GAP = 28, EASE_MOVE = 'power3.inOut', EASE_THROW = 'expo.out', EASE_PAUSE = 'power2.out';
+const car = { x: 0, speed: reduce ? 0 : 1 }; // x = offset in px; speed = drift multiplier (eased to 0 on hover)
+let step = 0, total = 0, startX = 0, tween = null, moved = 0;
+function measure() {
+  step = cards[0].offsetWidth + GAP; total = step * cards.length;
+  startX = Math.max(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--padpx')) || 0, (innerWidth - 1440) / 2) + (innerWidth < 900 ? 16 : Math.min(40, innerWidth * .026));
+  track.style.height = cards[0].offsetHeight + 'px';
+}
+measure(); addEventListener('resize', measure); imgs[0].addEventListener('load', measure);
+const wrap = v => ((v % total) + total) % total;
+function place() { // every card sits at its slot plus the shared offset, wrapped so the loop never ends
+  cards.forEach((c, i) => {
+    const x = wrap(i * step + car.x + step) - step + startX;
+    c.style.transform = `translate3d(${x}px,0,0)`;
+    const n = (x + step / 2) / innerWidth - .5; imgs[i].style.transform = `translate3d(${(-n * 7).toFixed(2)}%,0,0)`; // depth: photos drift against the card
+  });
+}
+const snapTo = (target, dur, ease) => { tween && tween.kill(); tween = gsap.to(car, { x: target, duration: dur, ease, onUpdate: place, onComplete: () => tween = null }); };
+const nearest = x => Math.round(x / step) * step;
+// arrows: S-curve travel by one card
+$('#cprev').onclick = () => snapTo(nearest(car.x) + step, .8, EASE_MOVE);
+$('#cnext').onclick = () => snapTo(nearest(car.x) - step, .8, EASE_MOVE);
+track.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') $('#cprev').click(); if (e.key === 'ArrowRight') $('#cnext').click(); });
+// hover / focus: drift eases down instead of stopping dead
+const setDrift = v => gsap.to(car, { speed: reduce ? 0 : v, duration: .6, ease: EASE_PAUSE, overwrite: 'auto' });
+track.addEventListener('pointerenter', e => e.pointerType === 'mouse' && setDrift(0));
+track.addEventListener('pointerleave', () => setDrift(1));
+track.addEventListener('focusin', () => setDrift(0)); track.addEventListener('focusout', () => setDrift(1));
+// drag + throw: track recent pointer velocity, then decelerate (expo.out) onto the nearest card
+let drag = null;
+track.addEventListener('pointerdown', e => { tween && tween.kill(); tween = null; drag = { x0: e.clientX, y0: e.clientY, c0: car.x, hist: [[e.clientX, performance.now()]], axis: e.pointerType === 'mouse' ? 'x' : null }; moved = 0; });
+addEventListener('pointermove', e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x0, dy = e.clientY - drag.y0;
+  if (!drag.axis) { if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return; drag.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'; if (drag.axis === 'x') track.setPointerCapture(e.pointerId); }
+  if (drag.axis !== 'x') { drag = null; return; } // vertical swipe on phones scrolls the page
+  moved = Math.max(moved, Math.abs(dx)); if (moved > 4) track.classList.add('drag');
+  car.x = drag.c0 + dx; place();
+  drag.hist.push([e.clientX, performance.now()]); if (drag.hist.length > 6) drag.hist.shift();
 });
+const release = () => {
+  if (!drag) return; const h = drag.hist; drag = null; track.classList.remove('drag');
+  if (moved < 5) return;
+  const a = h[0], b = h[h.length - 1], dt = Math.max(16, b[1] - a[1]), v = (b[0] - a[0]) / dt; // px per ms
+  const fling = Math.max(-3 * step, Math.min(3 * step, v * 180)); // a hard flick travels about three cards at most
+  const target = nearest(car.x + fling), dist = Math.abs(target - car.x);
+  snapTo(target, Math.min(1.6, Math.max(.7, dist / 1400 + .55)), EASE_THROW);
+};
+addEventListener('pointerup', release); addEventListener('pointercancel', release);
+// trackpad sideways scroll moves it too, then settles on a card
+let wheelT;
+track.addEventListener('wheel', e => { if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); tween && tween.kill(); tween = null; car.x -= e.deltaX; place(); clearTimeout(wheelT); wheelT = setTimeout(() => snapTo(nearest(car.x), .7, EASE_THROW), 140); }, { passive: false });
+// idle drift
+gsap.ticker.add((time, dt) => {
+  if (drag || tween || !car.speed) return;
+  const r = track.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+  car.x -= .045 * dt * car.speed; place();
+});
+place();
 const lb = $('#lb'); let lbi = 0, lbFrom = null;
 function fillLb() { const u = days[lbi]; $('#lbimg').src = u.img; $('#lbimg').alt = `${u.t} with NZT48 Original`; $('#lbwho').textContent = u.who; $('#lbt').textContent = u.t; $('#lbd').textContent = u.d; }
 function openLb(i) { lbi = i; lbFrom = document.activeElement; fillLb(); lb.classList.add('open'); lb.setAttribute('aria-hidden', 'false'); requestAnimationFrame(() => lb.classList.add('show')); lock(true); $('.x', lb).focus(); }
