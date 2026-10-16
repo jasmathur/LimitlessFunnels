@@ -311,8 +311,20 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
 
 :root{--c17130E:#17130E;--c0E0C0A:#0E0C0A;--c1D1913:#1D1913;--c0F0D0A:#0F0D0A;--c201C16:#201C16;--t242_179_34:242,179,34;--t237_231_218:237,231,218;--t10_9_8:10,9,8}
 html[data-theme="light"]{--bg:#FAF6EE;--panel:#F2ECE0;--panel2:#EAE2D2;--line:#E2D9C8;--line2:#D4C9B3;--mute:#6B6F7B;--soft:#3C404C;--text:#1C1C21;--gold:#26357A;--gold2:#3A4FA8;--c17130E:#F3EDE1;--c0E0C0A:#ECE4D4;--c1D1913:#FBF8F2;--c0F0D0A:#E9E1D1;--c201C16:#FBF8F2;--t242_179_34:38,53,122;--t237_231_218:28,28,33;--t10_9_8:250,246,238}
-html[data-theme="light"] header .logo,html[data-theme="light"] footer .wm,html[data-theme="light"] footer .giant,html[data-theme="light"] .mega img{filter:brightness(0)}
-html[data-theme="light"] .prism{--text:#EDE7DA;--soft:#CFC7B7;color:#EDE7DA}  /* the light show stays a night scene */</style>
+/* Light theme: logos in brand blue, dark blocks where the content needs a night backdrop */
+html[data-theme="light"] header .logo,html[data-theme="light"] footer .wm{content:url("assets/nzt48-logo-2026-blue.svg")}
+html[data-theme="light"] footer .giant{content:url("assets/nzt48-logo-2026-blue.svg");opacity:.1;-webkit-mask-image:none;mask-image:none}
+html[data-theme="light"] .mega img{content:url("assets/nzt48-logo-2026-outline-lightblue.svg");opacity:.35}
+html[data-theme="light"] .mega img:nth-child(even){opacity:.2}
+html[data-theme="light"] .hero h1{color:var(--gold)}
+html[data-theme="light"] .prism{background:#0D1533;--text:#EDE7DA;--soft:#C9D0EA;color:#EDE7DA}
+html[data-theme="light"] .day::after{background:linear-gradient(180deg,rgba(10,9,8,0) 45%,rgba(10,9,8,.92))}
+html[data-theme="light"] .day .cap b{color:#EDE7DA}
+html[data-theme="light"] .day .cap em{color:#A9B8FF}
+html[data-theme="light"] .tile.big::after{background:linear-gradient(180deg,rgba(13,21,51,0) 25%,rgba(13,21,51,.92))}
+html[data-theme="light"] .tile.big b{color:#fff}
+html[data-theme="light"] .tile.big span{color:#C9D0EA}
+html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
 </head>
 <body>
 <canvas id="gl" aria-hidden="true"></canvas>
