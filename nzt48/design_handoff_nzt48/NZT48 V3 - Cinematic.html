@@ -133,9 +133,9 @@ header .btn .arw{width:30px;height:30px}
 /* Prism: a slim rainbow flows into the gold capsule and leaves as one white beam */
 .prism{position:relative;height:100svh;min-height:640px;overflow:hidden;background:#000}
 .prism .beams{position:absolute;inset:0;width:100%;height:100%;z-index:1}
-.prism .head{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:25;max-width:min(34vw,460px);display:flex;flex-direction:column;gap:16px}
+.prism .head{position:absolute;left:var(--pad);top:clamp(96px,15vh,160px);z-index:25;max-width:min(34vw,460px);display:flex;flex-direction:column;gap:16px}
 .prism .head .h2{font-size:clamp(26px,3vw,50px)}
-.prism .anchor{position:absolute;left:62%;top:50%;width:min(24vw,340px);height:min(24vw,340px);transform:translate(-50%,-50%)}
+.prism .anchor{position:absolute;left:50%;top:50%;width:min(24vw,340px);height:min(24vw,340px);transform:translate(-50%,-50%)}
 
 /* Ingredients: every token has a hover card */
 .inside{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,96px);align-items:start}
@@ -291,7 +291,7 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   .podium .anchor{width:100vw;top:22%;height:60%}
   .prism{height:88svh}
   .prism .head{top:96px;transform:none;max-width:none;right:var(--pad)}
-  .prism .anchor{left:56%;top:60%;width:52vw;height:52vw}
+  .prism .anchor{left:50%;top:60%;width:52vw;height:52vw}
   #lb .box{grid-template-columns:1fr;overflow:auto}
   #lb .box img{max-height:50svh}
   .final video{width:min(80vw,380px)}
@@ -594,10 +594,10 @@ const layer = document.createElement('canvas'), lx = layer.getContext('2d'), glo
 let my = .5, sy = .5;
 prism.addEventListener('pointermove', e => { const r = prism.getBoundingClientRect(); my = (e.clientY - r.top) / r.height; });
 prism.addEventListener('pointerleave', () => my = .5);
-function rainbow(g, S, O, w0, w1) { // tapered band drawn as thin solid strips (no overlap seams), red on top → violet below
+function rainbow(g, S, O, w0, w1) { // tapered band from the far end S (wide) to the capsule O (narrow), thin solid strips, red on top → violet below
   const dx = O[0] - S[0], dy = O[1] - S[1], L = Math.hypot(dx, dy), nx = -dy / L, ny = dx / L, N = 64;
   for (let i = 0; i < N; i++) {
-    const t0 = i / N - .5, t1 = (i + 1.6) / N - .5, hue = (i / (N - 1)) * 270;
+    const t0 = i / N - .5, t1 = (i + 1.6) / N - .5, hue = (dx < 0 ? 1 - i / (N - 1) : i / (N - 1)) * 270;
     g.fillStyle = `hsl(${hue},92%,62%)`; g.beginPath();
     g.moveTo(S[0] + nx * w0 * t0, S[1] + ny * w0 * t0); g.lineTo(O[0] + nx * w1 * t0, O[1] + ny * w1 * t0);
     g.lineTo(O[0] + nx * w1 * t1, O[1] + ny * w1 * t1); g.lineTo(S[0] + nx * w0 * t1, S[1] + ny * w0 * t1); g.closePath(); g.fill();
@@ -619,14 +619,15 @@ function drawPrism(t) {
   sy += ((reduce ? .5 : my) - sy) * .05;
   const ar = pillAnchor.getBoundingClientRect(), O = [ar.left - pr.left + ar.width / 2, ar.top - pr.top + ar.height / 2];
   const tilt = (sy - .5) * .5 + (reduce ? 0 : Math.sin(t * .5) * .03), narrow = w < 900;
-  const S = [-40, O[1] + Math.tan(-.16 + tilt) * (O[0] + 40)], E = [w + 40, O[1] + Math.tan(.07 - tilt * .4) * (w + 40 - O[0])];
-  const w0 = narrow ? 46 : 92, w1 = narrow ? 8 : 12;
-  lx.setTransform(dpr, 0, 0, dpr, 0, 0); lx.clearRect(0, 0, w, h); rainbow(lx, S, O, w0, w1);
-  gx.setTransform(.25, 0, 0, .25, 0, 0); gx.clearRect(0, 0, w, h); gx.drawImage(layer, 0, 0, w, h); whiteBeam(gx, O, E, 3);
+  // white light in from the left, spectrum out to the right
+  const S = [-40, O[1] + Math.tan(.1 + tilt) * -(O[0] + 40)], E = [w + 40, O[1] + Math.tan(.14 - tilt * .4) * (w + 40 - O[0])];
+  const wFar = narrow ? 92 : 184, wNear = narrow ? 12 : 18;
+  lx.setTransform(dpr, 0, 0, dpr, 0, 0); lx.clearRect(0, 0, w, h); rainbow(lx, E, O, wFar, wNear);
+  gx.setTransform(.25, 0, 0, .25, 0, 0); gx.clearRect(0, 0, w, h); gx.drawImage(layer, 0, 0, w, h); whiteBeam(gx, O, S, 3);
   bx.setTransform(dpr, 0, 0, dpr, 0, 0); bx.clearRect(0, 0, w, h); bx.globalCompositeOperation = 'lighter';
-  bx.filter = 'blur(26px)'; bx.globalAlpha = .55; bx.drawImage(glowC, 0, 0, w, h); bx.filter = 'none';
-  bx.globalAlpha = .5; bx.drawImage(layer, 0, 0, w, h); bx.globalAlpha = 1;
-  whiteBeam(bx, O, E, 1);
+  bx.filter = 'blur(26px)'; bx.globalAlpha = .75; bx.drawImage(glowC, 0, 0, w, h); bx.filter = 'none';
+  bx.globalAlpha = .78; bx.drawImage(layer, 0, 0, w, h); bx.globalAlpha = 1;
+  whiteBeam(bx, O, S, 1);
   const f = bx.createRadialGradient(O[0], O[1], 0, O[0], O[1], 160); f.addColorStop(0, 'rgba(255,244,214,.5)'); f.addColorStop(.4, 'rgba(242,179,34,.12)'); f.addColorStop(1, 'rgba(0,0,0,0)');
   bx.fillStyle = f; bx.fillRect(O[0] - 160, O[1] - 160, 320, 320); bx.globalCompositeOperation = 'source-over';
   prism.style.setProperty('--tilt', tilt);
