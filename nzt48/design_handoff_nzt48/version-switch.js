@@ -6,6 +6,10 @@
     { v: 'V3', name: 'Cinematic', file: 'NZT48 V3 - Cinematic.html' },
   ];
   if (/[?&]embed=1/.test(location.search)) return;
+  // Colour theme preview (pages marked data-themeable): dark = original, light = V2's cream & blue
+  var root = document.documentElement, themed = root.hasAttribute('data-themeable');
+  var theme = 'dark'; try { theme = localStorage.getItem('nzt-theme') || 'dark'; } catch (e) {}
+  if (themed) root.setAttribute('data-theme', theme);
   var path = decodeURIComponent(location.pathname);
   var cur = VERSIONS.findIndex(function (x) { return path.endsWith('/' + x.file); });
 
@@ -30,6 +34,15 @@
       if (!on) b.onclick = function () { var id = sectionNow(); location.href = encodeURI(x.file) + (id ? '#v=' + id : ''); };
       wrap.appendChild(b);
     });
+    if (themed) {
+      var t = document.createElement('button');
+      t.type = 'button';
+      var label = function () { t.textContent = theme === 'light' ? 'Dark colours' : 'Light colours'; t.setAttribute('aria-label', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' colours'); };
+      t.style.cssText = 'border:0;cursor:pointer;height:36px;padding:0 14px;border-radius:999px;white-space:nowrap;font:inherit;background:#26357A;color:#fff;margin-left:4px';
+      label();
+      t.onclick = function () { theme = theme === 'light' ? 'dark' : 'light'; root.setAttribute('data-theme', theme); try { localStorage.setItem('nzt-theme', theme); } catch (e) {} label(); };
+      wrap.appendChild(t);
+    }
     document.body.appendChild(wrap);
   }
 
