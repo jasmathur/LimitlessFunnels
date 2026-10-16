@@ -78,10 +78,10 @@ header .btn .arw{width:30px;height:30px}
 .rating i{display:flex;gap:2px;color:var(--gold)}
 
 /* NZT-48 mega strip: outline logo drifting between hero and shop, fading into the black */
-.mega{position:relative;z-index:3;margin-top:-6vh;overflow:hidden;padding:2vh 0;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent),linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent),linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent);mask-composite:intersect}
+.mega{position:relative;z-index:3;margin-top:-6vh;overflow:hidden;padding:2vh 0;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent),linear-gradient(180deg,transparent,#000 40%,#000 60%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 30%,#000 70%,transparent),linear-gradient(180deg,transparent,#000 40%,#000 60%,transparent);mask-composite:intersect}
 .mega .row{display:flex;gap:5vw;width:max-content;animation:mq 60s linear infinite}
-.mega img{height:clamp(110px,15vw,280px);width:auto;opacity:.16}
-.mega img:nth-child(even){opacity:.07}
+.mega img{height:clamp(110px,15vw,280px);width:auto;opacity:.06}
+.mega img:nth-child(even){opacity:.03}
 @keyframes mq{to{transform:translateX(-50%)}}
 
 /* Configurator */
@@ -130,23 +130,12 @@ header .btn .arw{width:30px;height:30px}
 .podium .anchor{position:absolute;left:50%;top:21%;width:min(80vw,1100px);height:66%;transform:translateX(-50%)}
 .podium .cta{position:absolute;left:0;right:0;bottom:5vh;display:flex;justify-content:center;z-index:25}
 
-/* Prism: white beam in from the left, the bottle splits it into one ray per fact */
-.prism{position:relative;height:100svh;min-height:720px;overflow:hidden;background:#050404}
+/* Prism: a slim rainbow flows into the gold capsule and leaves as one white beam */
+.prism{position:relative;height:100svh;min-height:640px;overflow:hidden;background:#000}
 .prism .beams{position:absolute;inset:0;width:100%;height:100%;z-index:1}
-.prism .head{position:absolute;left:var(--pad);top:clamp(88px,13vh,140px);z-index:25;max-width:min(30vw,440px);display:flex;flex-direction:column;gap:16px}
+.prism .head{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);z-index:25;max-width:min(34vw,460px);display:flex;flex-direction:column;gap:16px}
 .prism .head .h2{font-size:clamp(26px,3vw,50px)}
-.prism .anchor{position:absolute;left:38%;top:50%;width:min(26vw,380px);height:58%;transform:translate(-50%,-50%)}
-.facts{position:absolute;z-index:25;left:62%;right:var(--pad);top:12%;bottom:10%;display:flex;flex-direction:column;justify-content:space-between;margin:0;padding:0;list-style:none}
-.fact{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:14px 1fr;column-gap:16px;align-items:center;padding:8px 16px 8px 0;border-radius:14px;transition:transform .5s var(--ease)}
-.fact i{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 18%,transparent),0 0 18px var(--c);transition:transform .4s var(--ease)}
-.fact b{font:400 clamp(15px,1.45vw,24px)/1.3 Boldonse,sans-serif;text-transform:uppercase;color:rgba(237,231,218,.82);transition:color .3s}
-.fact span{grid-column:2;font:400 14px/1.5 Inter;color:var(--soft);max-height:0;opacity:0;overflow:hidden;transition:max-height .45s var(--ease),opacity .3s,margin .3s}
-.fact:focus-visible{outline:2px solid var(--c);outline-offset:4px}
-.facts.lit .fact:not(.on) b{color:rgba(237,231,218,.3)}
-.fact.on{transform:translateX(10px)}
-.fact.on i{transform:scale(1.35)}
-.fact.on b{color:var(--c)}
-.fact.on span{max-height:60px;opacity:1;margin-top:6px}
+.prism .anchor{position:absolute;left:62%;top:50%;width:min(24vw,340px);height:min(24vw,340px);transform:translate(-50%,-50%)}
 
 /* Ingredients: every token has a hover card */
 .inside{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,96px);align-items:start}
@@ -216,8 +205,10 @@ header .btn .arw{width:30px;height:30px}
 
 /* Standards bento: fills the desktop viewport */
 .bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:16px;height:calc(100svh - 230px);min-height:560px;max-height:860px;margin-top:36px}
-.tile{position:relative;overflow:hidden;grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:clamp(22px,2.4vw,40px);border-radius:28px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .3s}
-.tile:hover{box-shadow:inset 0 0 0 1px rgba(242,179,34,.45)}
+.tile{position:relative;overflow:hidden;grid-column:span 2;display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:clamp(22px,2.4vw,40px);border-radius:28px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);transition:box-shadow .45s,background .45s}
+.tile::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(80% 90% at 20% 0%,rgba(242,179,34,.22),transparent 65%);opacity:0;transition:opacity .45s;pointer-events:none}
+.tile:hover{box-shadow:inset 0 0 0 1px rgba(242,179,34,.7),0 0 40px -6px rgba(242,179,34,.35)}
+.tile:hover::before{opacity:1}
 .tile svg{color:var(--gold);width:clamp(36px,3vw,52px);height:auto;transition:transform .6s var(--ease)}
 .tile:hover svg{transform:rotate(-8deg) scale(1.08)}
 .tile b{display:block;font:400 clamp(18px,1.9vw,32px)/1.36 Boldonse,sans-serif;text-transform:uppercase}
@@ -230,9 +221,6 @@ header .btn .arw{width:30px;height:30px}
 .tile.big>img{position:absolute;z-index:0}
 .tile.big b{font-size:clamp(28px,3.4vw,60px)}
 .tile.big span{color:var(--soft)}
-.tile.gold{background:var(--gold);color:var(--bg)}
-.tile.gold svg{color:var(--bg)}
-.tile.gold span{color:rgba(10,9,8,.72)}
 
 /* FAQ */
 .faq{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,96px);align-items:start}
@@ -301,10 +289,9 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   .tile{grid-column:span 1;min-height:200px}
   .tile.big{grid-column:span 2;grid-row:auto;min-height:340px}
   .podium .anchor{width:100vw;top:22%;height:60%}
-  .prism{height:auto;min-height:0;padding:96px var(--pad) 48px}
-  .prism .head{position:relative;left:0;top:0;max-width:none}
-  .prism .anchor{position:relative;left:auto;top:auto;transform:none;width:100%;height:46vh;margin:12px 0 20px}
-  .facts{position:relative;left:auto;right:auto;top:auto;bottom:auto;gap:6px}
+  .prism{height:88svh}
+  .prism .head{top:96px;transform:none;max-width:none;right:var(--pad)}
+  .prism .anchor{left:56%;top:60%;width:52vw;height:52vw}
   #lb .box{grid-template-columns:1fr;overflow:auto}
   #lb .box img{max-height:50svh}
   .final video{width:min(80vw,380px)}
@@ -393,10 +380,9 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
     <canvas class="beams" aria-hidden="true"></canvas>
     <div class="head">
       <h2 class="bebas h2">One capsule. The full spectrum.</h2>
-      <p class="lede">Everything on the label, split out. Point at a ray to read it.</p>
+      <p class="lede">Every part of the NZT-48™ Blend, gathered into a single gold capsule.</p>
     </div>
-    <div class="anchor" data-3d="prism" aria-hidden="true"></div>
-    <ul class="facts" id="facts"></ul>
+    <div class="anchor" data-3d="pill" aria-hidden="true"></div>
   </section>
 
   <section class="sec" id="inside" data-section="inside">
@@ -441,7 +427,7 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
     <h2 class="bebas h2">Made to a standard</h2>
     <div class="bento">
       <div class="tile big"><img src="assets/photos/r-diagonal.webp" alt="" loading="lazy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 8 2a6 6 0 0 0 3.6-1.2 1 1 0 0 1 1.4.8v9.4a1 1 0 0 1-.4.8A6 6 0 0 1 16 15c-3 0-5-2-8-2a6 6 0 0 0-4 1.5"/></svg><div><b>Made in the USA</b><span>Produced in the United States.</span></div></div>
-      <div class="tile gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.7 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9 12l2 2 4-4"/></svg><div><b>GMP-certified facility</b><span>Made in a facility that follows Good Manufacturing Practices.</span></div></div>
+      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.7 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9 12l2 2 4-4"/></svg><div><b>GMP-certified facility</b><span>Made in a facility that follows Good Manufacturing Practices.</span></div></div>
       <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg><div><b>Fully listed blend</b><span>All 23 ingredients are printed on the label.</span></div></div>
       <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg><div><b>One capsule a day</b><span>The labeled serving is a single capsule.</span></div></div>
       <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.8 9.8 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><div><b>30-day guarantee</b><span>Covered by our Returns Policy.</span></div></div>
@@ -602,50 +588,48 @@ function closeCart() { cartEl.classList.remove('show'); setTimeout(() => cartEl.
 $('#toastview').onclick = $('#cartbtn').onclick = openCart;
 $$('[data-close]', cartEl).forEach(b => b.onclick = closeCart);
 
-/* ---------- Prism: beam + rays drawn on a 2D canvas under the 3D bottle ---------- */
-const FACTS = [
-  ['750mg NZT-48™ Blend', 'The total blend weight in every capsule.', '#FF4D4D'],
-  ['23 ingredients', 'From Alpha GPC to Huperzine A, all on the label.', '#FF9A3D'],
-  ['Contains caffeine', 'Caffeine HCL and guarana. Skip other caffeine.', '#FFD23F'],
-  ['One capsule a day', 'The labeled serving is a single capsule.', '#5BE37D'],
-  ['30 servings per bottle', 'One bottle lasts 30 days at one a day.', '#3FD6E8'],
-  ['Made in the USA', 'Produced in the United States.', '#4D7BFF'],
-  ['GMP-certified facility', 'Made in a facility that follows Good Manufacturing Practices.', '#A866FF']
-];
-const prism = $('#spectrum'), beams = $('.beams', prism), bx = beams.getContext('2d'), factsEl = $('#facts'), prismAnchor = $('.anchor', prism);
-factsEl.innerHTML = FACTS.map((f, i) => `<li><button class="fact" style="--c:${f[2]}" data-i="${i}" aria-expanded="false"><i aria-hidden="true"></i><b>${f[0]}</b><span>${f[1]}</span></button></li>`).join('');
-const factBtns = $$('.fact', factsEl); let litI = -1;
-const light = i => { litI = i; factsEl.classList.toggle('lit', i >= 0); factBtns.forEach((b, j) => { b.classList.toggle('on', j === i); b.setAttribute('aria-expanded', j === i); }); };
-factBtns.forEach((b, i) => { b.addEventListener('mouseenter', () => light(i)); b.addEventListener('focus', () => light(i)); b.addEventListener('click', () => light(litI === i && !hover.matches ? -1 : i)); });
-factsEl.addEventListener('mouseleave', () => hover.matches && light(-1));
-const glow = FACTS.map(() => 0); // per-ray emphasis, eased toward its target each frame
-const motes = Array.from({ length: 70 }, () => ({ r: Math.floor(Math.random() * FACTS.length), p: Math.random(), v: .0016 + Math.random() * .003, o: Math.random() * 2 - 1 }));
+/* ---------- Prism: rainbow in from the left, white beam out to the right, the gold capsule in between ---------- */
+const prism = $('#spectrum'), beams = $('.beams', prism), bx = beams.getContext('2d'), pillAnchor = $('.anchor', prism);
+const layer = document.createElement('canvas'), lx = layer.getContext('2d'), glowC = document.createElement('canvas'), gx = glowC.getContext('2d');
+let my = .5, sy = .5;
+prism.addEventListener('pointermove', e => { const r = prism.getBoundingClientRect(); my = (e.clientY - r.top) / r.height; });
+prism.addEventListener('pointerleave', () => my = .5);
+function rainbow(g, S, O, w0, w1) { // tapered band drawn as thin solid strips (no overlap seams), red on top → violet below
+  const dx = O[0] - S[0], dy = O[1] - S[1], L = Math.hypot(dx, dy), nx = -dy / L, ny = dx / L, N = 64;
+  for (let i = 0; i < N; i++) {
+    const t0 = i / N - .5, t1 = (i + 1.6) / N - .5, hue = (i / (N - 1)) * 270;
+    g.fillStyle = `hsl(${hue},92%,62%)`; g.beginPath();
+    g.moveTo(S[0] + nx * w0 * t0, S[1] + ny * w0 * t0); g.lineTo(O[0] + nx * w1 * t0, O[1] + ny * w1 * t0);
+    g.lineTo(O[0] + nx * w1 * t1, O[1] + ny * w1 * t1); g.lineTo(S[0] + nx * w0 * t1, S[1] + ny * w0 * t1); g.closePath(); g.fill();
+  }
+  // soften both edges of the band and fade it in from the far left
+  g.globalCompositeOperation = 'destination-in';
+  const ac = g.createLinearGradient(S[0], S[1], O[0], O[1]); ac.addColorStop(0, 'rgba(0,0,0,0)'); ac.addColorStop(.45, 'rgba(0,0,0,.75)'); ac.addColorStop(1, 'rgba(0,0,0,1)');
+  g.fillStyle = ac; g.fillRect(0, 0, g.canvas.width, g.canvas.height); g.globalCompositeOperation = 'source-over';
+}
+function whiteBeam(g, O, E, scale) {
+  g.save(); g.globalCompositeOperation = 'lighter'; g.lineCap = 'round';
+  [[26, .05], [10, .16], [3.2, .6], [1.2, 1]].forEach(([w, a]) => { const gr = g.createLinearGradient(O[0], O[1], E[0], E[1]); gr.addColorStop(0, `rgba(255,255,255,${a})`); gr.addColorStop(.7, `rgba(255,255,255,${a * .8})`); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.strokeStyle = gr; g.lineWidth = w * scale; g.beginPath(); g.moveTo(O[0], O[1]); g.lineTo(E[0], E[1]); g.stroke(); });
+  g.restore();
+}
 function drawPrism(t) {
   const pr = prism.getBoundingClientRect(); if (pr.bottom < 0 || pr.top > innerHeight) return;
-  const dpr = Math.min(devicePixelRatio, 2), w = pr.width, h = pr.height;
-  if (beams.width !== Math.round(w * dpr) || beams.height !== Math.round(h * dpr)) { beams.width = Math.round(w * dpr); beams.height = Math.round(h * dpr); }
+  const dpr = Math.min(devicePixelRatio, 2), w = pr.width, h = pr.height, W2 = Math.round(w * dpr), H2 = Math.round(h * dpr);
+  if (beams.width !== W2 || beams.height !== H2) { beams.width = layer.width = W2; beams.height = layer.height = H2; glowC.width = Math.round(w / 4); glowC.height = Math.round(h / 4); }
+  sy += ((reduce ? .5 : my) - sy) * .05;
+  const ar = pillAnchor.getBoundingClientRect(), O = [ar.left - pr.left + ar.width / 2, ar.top - pr.top + ar.height / 2];
+  const tilt = (sy - .5) * .5 + (reduce ? 0 : Math.sin(t * .5) * .03), narrow = w < 900;
+  const S = [-40, O[1] + Math.tan(-.16 + tilt) * (O[0] + 40)], E = [w + 40, O[1] + Math.tan(.07 - tilt * .4) * (w + 40 - O[0])];
+  const w0 = narrow ? 46 : 92, w1 = narrow ? 8 : 12;
+  lx.setTransform(dpr, 0, 0, dpr, 0, 0); lx.clearRect(0, 0, w, h); rainbow(lx, S, O, w0, w1);
+  gx.setTransform(.25, 0, 0, .25, 0, 0); gx.clearRect(0, 0, w, h); gx.drawImage(layer, 0, 0, w, h); whiteBeam(gx, O, E, 3);
   bx.setTransform(dpr, 0, 0, dpr, 0, 0); bx.clearRect(0, 0, w, h); bx.globalCompositeOperation = 'lighter';
-  const ar = prismAnchor.getBoundingClientRect(), cx = ar.left - pr.left + ar.width / 2, cy = ar.top - pr.top + ar.height / 2;
-  const narrow = innerWidth < 900, sx = narrow ? 0 : 0, sy = narrow ? ar.top - pr.top + ar.height * .15 : cy + h * .06;
-  // incoming white beam, a few soft layers wide to tight
-  [[44, .05], [18, .12], [6, .5], [2, .9]].forEach(([lw, a]) => { bx.strokeStyle = `rgba(255,250,240,${a * (.9 + .1 * Math.sin(t * 3))})`; bx.lineWidth = lw; bx.lineCap = 'round'; bx.beginPath(); bx.moveTo(sx, sy); bx.lineTo(cx, cy); bx.stroke(); });
-  const pts = factBtns.map(b => { const d = $('i', b).getBoundingClientRect(); return [d.left - pr.left + d.width / 2, d.top - pr.top + d.height / 2]; });
-  pts.forEach(([tx, ty], i) => {
-    glow[i] += ((litI < 0 ? .55 : litI === i ? 1 : .14) - glow[i]) * .1;
-    const g = glow[i] * (.88 + .12 * Math.sin(t * 2.2 + i * 1.7)), ang = Math.atan2(ty - cy, tx - cx), nx = -Math.sin(ang), ny = Math.cos(ang);
-    const w0 = 3, w1 = (narrow ? 14 : 26) * (.6 + g * .9);
-    const grad = bx.createLinearGradient(cx, cy, tx, ty); const c = FACTS[i][2];
-    grad.addColorStop(0, c + 'ee'); grad.addColorStop(.55, c + Math.round(g * 150).toString(16).padStart(2, '0')); grad.addColorStop(1, c + Math.round(g * 90).toString(16).padStart(2, '0'));
-    bx.globalAlpha = Math.min(1, g * 1.15); bx.fillStyle = grad; bx.beginPath();
-    bx.moveTo(cx + nx * w0, cy + ny * w0); bx.lineTo(tx + nx * w1, ty + ny * w1); bx.lineTo(tx - nx * w1, ty - ny * w1); bx.lineTo(cx - nx * w0, cy - ny * w0); bx.closePath(); bx.fill();
-    bx.globalAlpha = g * .9; bx.strokeStyle = c; bx.lineWidth = 1.2; bx.beginPath(); bx.moveTo(cx, cy); bx.lineTo(tx, ty); bx.stroke();
-  });
-  // dust drifting outward along the rays
-  bx.globalAlpha = 1;
-  motes.forEach(m => { if (!reduce) m.p += m.v; if (m.p > 1) { m.p = 0; m.r = Math.floor(Math.random() * FACTS.length); }
-    const [tx, ty] = pts[m.r], x = cx + (tx - cx) * m.p, y = cy + (ty - cy) * m.p + m.o * 10 * m.p;
-    bx.fillStyle = FACTS[m.r][2]; bx.globalAlpha = glow[m.r] * (1 - m.p) * .9; bx.beginPath(); bx.arc(x, y, 1.4, 0, 7); bx.fill(); });
-  bx.globalAlpha = 1; bx.globalCompositeOperation = 'source-over';
+  bx.filter = 'blur(26px)'; bx.globalAlpha = .55; bx.drawImage(glowC, 0, 0, w, h); bx.filter = 'none';
+  bx.globalAlpha = .5; bx.drawImage(layer, 0, 0, w, h); bx.globalAlpha = 1;
+  whiteBeam(bx, O, E, 1);
+  const f = bx.createRadialGradient(O[0], O[1], 0, O[0], O[1], 160); f.addColorStop(0, 'rgba(255,244,214,.5)'); f.addColorStop(.4, 'rgba(242,179,34,.12)'); f.addColorStop(1, 'rgba(0,0,0,0)');
+  bx.fillStyle = f; bx.fillRect(O[0] - 160, O[1] - 160, 320, 320); bx.globalCompositeOperation = 'source-over';
+  prism.style.setProperty('--tilt', tilt);
 }
 gsap.ticker.add(() => drawPrism(performance.now() / 1000));
 
@@ -823,7 +807,7 @@ async function buildRibbons(parent) {
   } };
 }
 
-loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap-v2.glb?v=v2-20261017d', pillUrl: './3d/nzt48-gold-pill-pbr.glb' }).then(({ model }) => {
+loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap-v2.glb?v=v2-20261017d', pillUrl: './3d/nzt48-gold-pill-pbr.glb' }).then(({ model, pillTemplate }) => {
   scene.remove(model);
   anchors.forEach(a => {
     if (a.type === 'config') for (let i = 0; i < 3; i++) { const b = unitize(model.clone(true)); b.userData.u = b.scale.x; b.scale.setScalar(.001); a.root.add(b); }
@@ -832,7 +816,7 @@ loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap-v2.glb?v=v2-20261017d', pillU
       const spot = new THREE.SpotLight(0xffd27a, 18, 6, .5, .6); spot.position.set(0, 2.2, 1.2); spot.target = b; a.root.add(spot);
       buildRibbons(a.root).then(r => a.ribbons = r);
     }
-    if (a.type === 'prism') { const b = unitize(model.clone(true)); b.scale.multiplyScalar(.82); a.root.add(b); a.hero = b; }
+    if (a.type === 'pill' && pillTemplate) { const p = unitize(pillTemplate.clone(true)); p.scale.multiplyScalar(.95); a.root.add(p); a.hero = p; }
   });
 }).catch(err => console.warn('3D load failed', err));
 
@@ -876,7 +860,7 @@ gsap.ticker.add(() => {
       if (a.hero) a.hero.rotation.y = reduce ? 0 : t * .3;
       a.ribbons && a.ribbons.update(t);
     }
-    if (a.type === 'prism') { a.root.rotation.set(.04, -.4 + prog * .8, 0); if (a.hero) a.hero.rotation.y = reduce ? 0 : Math.sin(t * .4) * .5; }
+    if (a.type === 'pill' && a.hero) { const tl = +getComputedStyle(prism).getPropertyValue('--tilt') || 0; a.root.rotation.set(.3 + tl * .6, (reduce ? 0 : t * .35) + prog * 1.2, .9 - tl * .4); }
     a.root.visible = true;
     renderer.setScissorTest(true);
     renderer.setScissor(c.left, H - c.bottom, c.right - c.left, c.bottom - c.top);
