@@ -130,6 +130,24 @@ header .btn .arw{width:30px;height:30px}
 .podium .anchor{position:absolute;left:50%;top:21%;width:min(80vw,1100px);height:66%;transform:translateX(-50%)}
 .podium .cta{position:absolute;left:0;right:0;bottom:5vh;display:flex;justify-content:center;z-index:25}
 
+/* Prism: white beam in from the left, the bottle splits it into one ray per fact */
+.prism{position:relative;height:100svh;min-height:720px;overflow:hidden;background:#050404}
+.prism .beams{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.prism .head{position:absolute;left:var(--pad);top:clamp(88px,13vh,140px);z-index:25;max-width:min(30vw,440px);display:flex;flex-direction:column;gap:16px}
+.prism .head .h2{font-size:clamp(26px,3vw,50px)}
+.prism .anchor{position:absolute;left:38%;top:50%;width:min(26vw,380px);height:58%;transform:translate(-50%,-50%)}
+.facts{position:absolute;z-index:25;left:62%;right:var(--pad);top:12%;bottom:10%;display:flex;flex-direction:column;justify-content:space-between;margin:0;padding:0;list-style:none}
+.fact{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:14px 1fr;column-gap:16px;align-items:center;padding:8px 16px 8px 0;border-radius:14px;transition:transform .5s var(--ease)}
+.fact i{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 18%,transparent),0 0 18px var(--c);transition:transform .4s var(--ease)}
+.fact b{font:400 clamp(15px,1.45vw,24px)/1.3 Boldonse,sans-serif;text-transform:uppercase;color:rgba(237,231,218,.82);transition:color .3s}
+.fact span{grid-column:2;font:400 14px/1.5 Inter;color:var(--soft);max-height:0;opacity:0;overflow:hidden;transition:max-height .45s var(--ease),opacity .3s,margin .3s}
+.fact:focus-visible{outline:2px solid var(--c);outline-offset:4px}
+.facts.lit .fact:not(.on) b{color:rgba(237,231,218,.3)}
+.fact.on{transform:translateX(10px)}
+.fact.on i{transform:scale(1.35)}
+.fact.on b{color:var(--c)}
+.fact.on span{max-height:60px;opacity:1;margin-top:6px}
+
 /* Ingredients: every token has a hover card */
 .inside{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,96px);align-items:start}
 .inside .intro{display:flex;flex-direction:column;gap:20px;position:sticky;top:120px}
@@ -283,6 +301,10 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   .tile{grid-column:span 1;min-height:200px}
   .tile.big{grid-column:span 2;grid-row:auto;min-height:340px}
   .podium .anchor{width:100vw;top:22%;height:60%}
+  .prism{height:auto;min-height:0;padding:96px var(--pad) 48px}
+  .prism .head{position:relative;left:0;top:0;max-width:none}
+  .prism .anchor{position:relative;left:auto;top:auto;transform:none;width:100%;height:46vh;margin:12px 0 20px}
+  .facts{position:relative;left:auto;right:auto;top:auto;bottom:auto;gap:6px}
   #lb .box{grid-template-columns:1fr;overflow:auto}
   #lb .box img{max-height:50svh}
   .final video{width:min(80vw,380px)}
@@ -365,6 +387,16 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
     <h2 class="bebas">One capsule is the whole serving.</h2>
     <div class="anchor" data-3d="podium" role="img" aria-label="NZT48 bottle circled by ribbons: 750mg NZT-48 Blend, 23 ingredients, contains caffeine, one capsule a day, 30 servings per bottle, made in the USA, GMP-certified facility"></div>
     <div class="cta"><a class="btn pri" href="#shop" data-scroll>Pick your size<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a></div>
+  </section>
+
+  <section class="prism" id="spectrum" data-section="spectrum">
+    <canvas class="beams" aria-hidden="true"></canvas>
+    <div class="head">
+      <h2 class="bebas h2">One capsule. The full spectrum.</h2>
+      <p class="lede">Everything on the label, split out. Point at a ray to read it.</p>
+    </div>
+    <div class="anchor" data-3d="prism" aria-hidden="true"></div>
+    <ul class="facts" id="facts"></ul>
   </section>
 
   <section class="sec" id="inside" data-section="inside">
@@ -570,6 +602,53 @@ function closeCart() { cartEl.classList.remove('show'); setTimeout(() => cartEl.
 $('#toastview').onclick = $('#cartbtn').onclick = openCart;
 $$('[data-close]', cartEl).forEach(b => b.onclick = closeCart);
 
+/* ---------- Prism: beam + rays drawn on a 2D canvas under the 3D bottle ---------- */
+const FACTS = [
+  ['750mg NZT-48™ Blend', 'The total blend weight in every capsule.', '#FF4D4D'],
+  ['23 ingredients', 'From Alpha GPC to Huperzine A, all on the label.', '#FF9A3D'],
+  ['Contains caffeine', 'Caffeine HCL and guarana. Skip other caffeine.', '#FFD23F'],
+  ['One capsule a day', 'The labeled serving is a single capsule.', '#5BE37D'],
+  ['30 servings per bottle', 'One bottle lasts 30 days at one a day.', '#3FD6E8'],
+  ['Made in the USA', 'Produced in the United States.', '#4D7BFF'],
+  ['GMP-certified facility', 'Made in a facility that follows Good Manufacturing Practices.', '#A866FF']
+];
+const prism = $('#spectrum'), beams = $('.beams', prism), bx = beams.getContext('2d'), factsEl = $('#facts'), prismAnchor = $('.anchor', prism);
+factsEl.innerHTML = FACTS.map((f, i) => `<li><button class="fact" style="--c:${f[2]}" data-i="${i}" aria-expanded="false"><i aria-hidden="true"></i><b>${f[0]}</b><span>${f[1]}</span></button></li>`).join('');
+const factBtns = $$('.fact', factsEl); let litI = -1;
+const light = i => { litI = i; factsEl.classList.toggle('lit', i >= 0); factBtns.forEach((b, j) => { b.classList.toggle('on', j === i); b.setAttribute('aria-expanded', j === i); }); };
+factBtns.forEach((b, i) => { b.addEventListener('mouseenter', () => light(i)); b.addEventListener('focus', () => light(i)); b.addEventListener('click', () => light(litI === i && !hover.matches ? -1 : i)); });
+factsEl.addEventListener('mouseleave', () => hover.matches && light(-1));
+const glow = FACTS.map(() => 0); // per-ray emphasis, eased toward its target each frame
+const motes = Array.from({ length: 70 }, () => ({ r: Math.floor(Math.random() * FACTS.length), p: Math.random(), v: .0016 + Math.random() * .003, o: Math.random() * 2 - 1 }));
+function drawPrism(t) {
+  const pr = prism.getBoundingClientRect(); if (pr.bottom < 0 || pr.top > innerHeight) return;
+  const dpr = Math.min(devicePixelRatio, 2), w = pr.width, h = pr.height;
+  if (beams.width !== Math.round(w * dpr) || beams.height !== Math.round(h * dpr)) { beams.width = Math.round(w * dpr); beams.height = Math.round(h * dpr); }
+  bx.setTransform(dpr, 0, 0, dpr, 0, 0); bx.clearRect(0, 0, w, h); bx.globalCompositeOperation = 'lighter';
+  const ar = prismAnchor.getBoundingClientRect(), cx = ar.left - pr.left + ar.width / 2, cy = ar.top - pr.top + ar.height / 2;
+  const narrow = innerWidth < 900, sx = narrow ? 0 : 0, sy = narrow ? ar.top - pr.top + ar.height * .15 : cy + h * .06;
+  // incoming white beam, a few soft layers wide to tight
+  [[44, .05], [18, .12], [6, .5], [2, .9]].forEach(([lw, a]) => { bx.strokeStyle = `rgba(255,250,240,${a * (.9 + .1 * Math.sin(t * 3))})`; bx.lineWidth = lw; bx.lineCap = 'round'; bx.beginPath(); bx.moveTo(sx, sy); bx.lineTo(cx, cy); bx.stroke(); });
+  const pts = factBtns.map(b => { const d = $('i', b).getBoundingClientRect(); return [d.left - pr.left + d.width / 2, d.top - pr.top + d.height / 2]; });
+  pts.forEach(([tx, ty], i) => {
+    glow[i] += ((litI < 0 ? .55 : litI === i ? 1 : .14) - glow[i]) * .1;
+    const g = glow[i] * (.88 + .12 * Math.sin(t * 2.2 + i * 1.7)), ang = Math.atan2(ty - cy, tx - cx), nx = -Math.sin(ang), ny = Math.cos(ang);
+    const w0 = 3, w1 = (narrow ? 14 : 26) * (.6 + g * .9);
+    const grad = bx.createLinearGradient(cx, cy, tx, ty); const c = FACTS[i][2];
+    grad.addColorStop(0, c + 'ee'); grad.addColorStop(.55, c + Math.round(g * 150).toString(16).padStart(2, '0')); grad.addColorStop(1, c + Math.round(g * 90).toString(16).padStart(2, '0'));
+    bx.globalAlpha = Math.min(1, g * 1.15); bx.fillStyle = grad; bx.beginPath();
+    bx.moveTo(cx + nx * w0, cy + ny * w0); bx.lineTo(tx + nx * w1, ty + ny * w1); bx.lineTo(tx - nx * w1, ty - ny * w1); bx.lineTo(cx - nx * w0, cy - ny * w0); bx.closePath(); bx.fill();
+    bx.globalAlpha = g * .9; bx.strokeStyle = c; bx.lineWidth = 1.2; bx.beginPath(); bx.moveTo(cx, cy); bx.lineTo(tx, ty); bx.stroke();
+  });
+  // dust drifting outward along the rays
+  bx.globalAlpha = 1;
+  motes.forEach(m => { if (!reduce) m.p += m.v; if (m.p > 1) { m.p = 0; m.r = Math.floor(Math.random() * FACTS.length); }
+    const [tx, ty] = pts[m.r], x = cx + (tx - cx) * m.p, y = cy + (ty - cy) * m.p + m.o * 10 * m.p;
+    bx.fillStyle = FACTS[m.r][2]; bx.globalAlpha = glow[m.r] * (1 - m.p) * .9; bx.beginPath(); bx.arc(x, y, 1.4, 0, 7); bx.fill(); });
+  bx.globalAlpha = 1; bx.globalCompositeOperation = 'source-over';
+}
+gsap.ticker.add(() => drawPrism(performance.now() / 1000));
+
 /* ---------- Ingredients: every token opens a card ---------- */
 // Plain "what it is" notes for the rest of the blend (identity only, no benefit claims)
 const WHAT = {
@@ -682,41 +761,66 @@ function unitize(obj) { // wrap so the object's longest side is 1 unit, centred
   const g = new THREE.Group(); obj.position.sub(c); g.add(obj); g.scale.setScalar(1 / Math.max(size.x, size.y, size.z)); return g;
 }
 
-/* Ribbons: gold bands that wrap the bottle on tilted orbits; text reads on both faces */
-const RINGS = [
-  { r: .5, y: .16, tilt: .26, roll: .08, speed: .32, labels: ['750mg NZT-48™ Blend', 'One capsule a day', 'Made in the USA'] },
-  { r: .58, y: -.14, tilt: -.3, roll: -.06, speed: -.24, labels: ['23 ingredients', 'Contains caffeine', '30 servings per bottle', 'GMP-certified facility'] }
-];
-const BAND = .072;
-function labelTexture(text, flip) {
-  const px = 72, h = 128, g = document.createElement('canvas').getContext('2d');
-  g.font = `400 ${px * .62}px Boldonse`; const w = Math.ceil(g.measureText(text.toUpperCase()).width + px * 2.2);
+/* Ribbons: one level orbit, three thick waved gold bands; each fades out and returns as the next label */
+const LABELS = ['750mg NZT-48™ Blend', 'One capsule a day', 'Made in the USA', '23 ingredients', 'Contains caffeine', '30 servings per bottle', 'GMP-certified facility'];
+const RING = { r: .64, band: .1, thick: .016, tilt: .1 };
+function labelTexture(text) {
+  const px = 46, h = 128, g = document.createElement('canvas').getContext('2d');
+  g.font = `400 ${px}px Boldonse`; const w = Math.ceil(g.measureText(text.toUpperCase()).width + px * 3.4);
   g.canvas.width = w; g.canvas.height = h;
-  g.fillStyle = '#F2B322'; g.fillRect(0, 0, w, h);
-  g.fillStyle = 'rgba(10,9,8,.18)'; g.fillRect(0, 10, w, 3); g.fillRect(0, h - 13, w, 3);
-  g.fillStyle = '#0A0908'; g.font = `400 ${px * .62}px Boldonse`; g.textAlign = 'center'; g.textBaseline = 'middle';
-  if (flip) { g.translate(w, 0); g.scale(-1, 1); }
-  g.fillText(text.toUpperCase(), w / 2, h / 2 + 4);
+  const bg = g.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#FFD970'); bg.addColorStop(.45, '#F2B322'); bg.addColorStop(1, '#B9800F');
+  g.fillStyle = bg; g.fillRect(0, 0, w, h);
+  g.fillStyle = 'rgba(10,9,8,.85)'; g.font = `400 ${px}px Boldonse`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(text.toUpperCase(), w / 2, h / 2 + 3);
+  [px * 1.1, w - px * 1.1].forEach(x => { g.beginPath(); g.arc(x, h / 2, 7, 0, 7); g.fill(); }); // small rivets at each end
   const t = new THREE.CanvasTexture(g.canvas); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
   return { t, aspect: w / h };
 }
+function ribbonGeometry(r, len, band, thick, phase) { // curved band with real thickness and a gentle wave; group 0 = printed face, 1 = metal edges
+  const N = 72, P = [], UV = [], I0 = [], I1 = [];
+  const wave = th => Math.sin(th * 3 + phase) * band * .35;
+  for (let i = 0; i <= N; i++) {
+    const u = i / N, th = -len / 2 + u * len, y = wave(th), ro = r + thick / 2, ri = r - thick / 2, c = Math.cos(th), sn = Math.sin(th);
+    P.push(sn * ro, y + band / 2, c * ro, sn * ro, y - band / 2, c * ro, sn * ri, y - band / 2, c * ri, sn * ri, y + band / 2, c * ri);
+    UV.push(u, 1, u, 0, u, 0, u, 1);
+  }
+  for (let i = 0; i < N; i++) {
+    const a = i * 4, b = a + 4, q = (p0, p1, p2, p3, list) => list.push(p0, p1, p2, p0, p2, p3);
+    q(a, a + 1, b + 1, b, I0);              // outer, printed
+    q(a + 3, b + 3, b + 2, a + 2, I1);      // inner
+    q(a, b, b + 3, a + 3, I1);              // top edge
+    q(a + 1, a + 2, b + 2, b + 1, I1);      // bottom edge
+  }
+  const e = N * 4; I1.push(0, 3, 2, 0, 2, 1, e, e + 1, e + 2, e, e + 2, e + 3); // end caps
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(UV, 2));
+  geo.setIndex([...I0, ...I1]); geo.addGroup(0, I0.length, 0); geo.addGroup(I0.length, I1.length, 1); geo.computeVertexNormals();
+  return geo;
+}
+const metal = new THREE.MeshStandardMaterial({ color: 0xE0A21C, metalness: 1, roughness: .28, transparent: true });
 async function buildRibbons(parent) {
-  try { await document.fonts.load('400 44px Boldonse'); } catch (e) {}
-  return RINGS.map(R => {
-    const ring = new THREE.Group(); ring.position.y = R.y; ring.rotation.set(R.tilt, 0, R.roll); ring.userData.speed = R.speed;
-    const gap = .18, arcs = R.labels.map(l => labelTexture(l, false).aspect * BAND / R.r);
-    const total = arcs.reduce((a, b) => a + b, 0) + gap * R.labels.length, fit = Math.min(1, (Math.PI * 2) / total);
-    let th = 0;
-    R.labels.forEach((l, i) => {
-      const len = arcs[i] * fit;
-      const geo = new THREE.CylinderGeometry(R.r, R.r, BAND, 96, 1, true, th, len);
-      const front = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: labelTexture(l, false).t, side: THREE.FrontSide, toneMapped: false }));
-      const back = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: labelTexture(l, true).t, side: THREE.BackSide, toneMapped: false, color: 0xb9a37a }));
-      ring.add(front, back);
-      th += len + gap * fit;
-    });
-    parent.add(ring); return ring;
+  try { await document.fonts.load('400 46px Boldonse'); } catch (e) {}
+  const ring = new THREE.Group(); ring.rotation.set(RING.tilt, 0, 0); parent.add(ring);
+  const slots = [0, 1, 2].map(k => {
+    const m = new THREE.Mesh(undefined, [new THREE.MeshStandardMaterial({ metalness: .55, roughness: .32, transparent: true }), metal.clone()]);
+    m.userData = { k, base: k * Math.PI * 2 / 3, label: k, fade: 1, phase: k * 2.1 };
+    ring.add(m); return m;
   });
+  const dress = m => { const L = labelTexture(LABELS[m.userData.label]), len = Math.min(L.aspect * RING.band / RING.r, 1.6);
+    m.geometry && m.geometry.dispose(); m.material[0].map && m.material[0].map.dispose();
+    m.geometry = ribbonGeometry(RING.r, len, RING.band, RING.thick, m.userData.phase); m.material[0].map = L.t; m.material[0].needsUpdate = true; };
+  slots.forEach(dress);
+  let next = 3, swapAt = 3.5, swapping = null;
+  return { ring, update(t) {
+    ring.rotation.y = reduce ? 0 : t * .28;
+    if (!reduce && t > swapAt && !swapping) { swapping = slots[(next) % 3]; swapping.userData.dir = -1; }
+    if (swapping) {
+      const u = swapping.userData; u.fade = Math.max(0, Math.min(1, u.fade + u.dir * .04));
+      if (u.fade === 0) { u.label = next % LABELS.length; next++; dress(swapping); u.dir = 1; }
+      if (u.fade === 1 && u.dir === 1) { swapping = null; swapAt = t + 3.2; }
+    }
+    slots.forEach(m => { const f = m.userData.fade; m.material.forEach(x => x.opacity = f); m.scale.set(1, .4 + .6 * f, 1); m.rotation.y = m.userData.base; });
+  } };
 }
 
 loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap-v2.glb?v=v2-20261017d', pillUrl: './3d/nzt48-gold-pill-pbr.glb' }).then(({ model }) => {
@@ -726,8 +830,9 @@ loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap-v2.glb?v=v2-20261017d', pillU
     if (a.type === 'podium') {
       const b = unitize(model.clone(true)); b.scale.multiplyScalar(.74); a.root.add(b); a.hero = b;
       const spot = new THREE.SpotLight(0xffd27a, 18, 6, .5, .6); spot.position.set(0, 2.2, 1.2); spot.target = b; a.root.add(spot);
-      buildRibbons(a.root).then(r => a.rings = r);
+      buildRibbons(a.root).then(r => a.ribbons = r);
     }
+    if (a.type === 'prism') { const b = unitize(model.clone(true)); b.scale.multiplyScalar(.82); a.root.add(b); a.hero = b; }
   });
 }).catch(err => console.warn('3D load failed', err));
 
@@ -769,8 +874,9 @@ gsap.ticker.add(() => {
     if (a.type === 'podium') {
       a.root.rotation.set(.12, -.35 + prog * .7, 0);
       if (a.hero) a.hero.rotation.y = reduce ? 0 : t * .3;
-      (a.rings || []).forEach(g => g.rotation.y = reduce ? 0 : t * g.userData.speed);
+      a.ribbons && a.ribbons.update(t);
     }
+    if (a.type === 'prism') { a.root.rotation.set(.04, -.4 + prog * .8, 0); if (a.hero) a.hero.rotation.y = reduce ? 0 : Math.sin(t * .4) * .5; }
     a.root.visible = true;
     renderer.setScissorTest(true);
     renderer.setScissor(c.left, H - c.bottom, c.right - c.left, c.bottom - c.top);
