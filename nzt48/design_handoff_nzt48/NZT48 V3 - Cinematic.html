@@ -73,6 +73,7 @@ header .logo{height:22px;width:auto;filter:invert(1) brightness(1.4)}
 .stack{position:relative;padding:0 var(--pad) 10vh}
 .card{position:sticky;top:84px;height:calc(100svh - 110px);min-height:560px;border-radius:14px;overflow:hidden;margin-bottom:6vh;transform-origin:50% 0;background:var(--panel)}
 .card .tint{position:absolute;inset:0}
+.card .veil{position:absolute;inset:0;background:#0A0908;opacity:0;pointer-events:none;z-index:5}
 .card .mq{position:absolute;left:0;right:0;top:44%;transform:translateY(-50%);white-space:nowrap;font-size:clamp(56px,8vw,140px);color:rgba(237,231,218,.07);pointer-events:none}
 .card .mq span{display:inline-block;animation:mq 26s linear infinite;padding-right:.3em}
 @keyframes mq{to{transform:translateX(-100%)}}
@@ -357,11 +358,8 @@ ScrollTrigger.create({ trigger: fill, start: 'top 80%', end: 'bottom 45%', scrub
 
 /* ---------- Stacked product cards ---------- */
 const cards = gsap.utils.toArray('.card');
-cards.forEach((c, i) => {
-  if (i === cards.length - 1) return;
-  gsap.to(c, { scale: .92, filter: 'brightness(.45)', ease: 'none',
-    scrollTrigger: { trigger: cards[i + 1], start: 'top 65%', end: 'top 84px', scrub: true } });
-});
+// Dim + shrink is driven from the same per-frame value the 3D bottles use (see cardCover), so card and bottles always move together
+cards.forEach(c => c.appendChild(Object.assign(document.createElement('div'), { className: 'veil' })));
 
 /* ---------- Use cases ---------- */
 const D = window.NZT48 && NZT48.D;
@@ -441,7 +439,7 @@ loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap.glb', pillUrl: './3d/nzt48-go
   const bottleUnit = () => unitize(model.clone(true));
   anchors.forEach(a => {
     if (a.type === 'bottles') {
-      for (let i = 0; i < a.n; i++) { const b = bottleUnit(); const d = i - (a.n - 1) / 2; b.position.set(d * .62, 0, -Math.abs(d) * .4); b.rotation.y = d * .35; b.scale.multiplyScalar(a.n === 1 ? .82 : .72); a.root.add(b); }
+      for (let i = 0; i < a.n; i++) { const b = bottleUnit(); const d = i - (a.n - 1) / 2; b.position.set(d * .4, 0, -Math.abs(d) * .2); b.rotation.y = d * .25; b.scale.multiplyScalar(a.n === 1 ? .82 : .72); a.root.add(b); }
     } else if (a.type === 'podium') {
       const mat = new THREE.MeshStandardMaterial({ color: 0x1a1814, roughness: .55, metalness: .3, envMapIntensity: .6 });
       const tiers = [[1.5, .16, 1], [1.1, .16, .8], [.72, .16, .6]];
@@ -457,6 +455,7 @@ loadNZT(scene, { bottleUrl: './3d/nzt48-bottle-cap.glb', pillUrl: './3d/nzt48-go
 }).catch(err => console.warn('3D load failed', err));
 
 const cardEls = [...document.querySelectorAll('.card')];
+function cardCover(card) { const next = cardEls[cardEls.indexOf(card) + 1]; if (!next) return 0; return THREE.MathUtils.clamp((H * .65 - next.getBoundingClientRect().top) / (H * .65 - 84), 0, 1); }
 function clipRect(a) { // visible part of the anchor's container; stacked cards are cut off where the next card starts
   const box = a.el.closest('.card') || a.el.closest('section'), r = box.getBoundingClientRect();
   let top = Math.max(r.top, 0), bottom = Math.min(r.bottom, H);
@@ -468,6 +467,7 @@ renderer.autoClear = false;
 const clock = new THREE.Clock();
 gsap.ticker.add(() => {
   const t = clock.getElapsedTime();
+  cardEls.forEach(c => { const p = cardCover(c); c.style.transform = p ? 'scale(' + (1 - .08 * p) + ')' : ''; c.lastChild.style.opacity = (p * .55).toFixed(3); });
   renderer.setScissorTest(false); renderer.clear();
   anchors.forEach(a => a.root.visible = false);
   let any = false;
@@ -492,8 +492,7 @@ gsap.ticker.add(() => {
     let fade = 1;
     const card = a.el.closest('.card');
     if (card) {
-      const next = cardEls[cardEls.indexOf(card) + 1];
-      if (next) { const nt = next.getBoundingClientRect().top, p = THREE.MathUtils.clamp((H * .65 - nt) / (H * .65 - 84), 0, 1); fade = 1 - p; if (p > .92) continue; } // same timing as the card's dim/scale
+      const p = cardCover(card); fade = 1 - p * .55; if (p > .92) continue; // same value as the card's veil
       const enter = THREE.MathUtils.clamp((H - card.getBoundingClientRect().top) / (H * .45), 0, 1); fade *= enter;
       a.root.position.y -= (1 - fade) * r.height * k * .12;
     }
