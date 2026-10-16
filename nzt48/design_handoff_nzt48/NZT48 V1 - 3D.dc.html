@@ -230,7 +230,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid #F4C
       </div>
       <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
         <div style="flex:1 1 0;min-width:0;position:relative">
-          <div data-nzt-anchor="formula" data-ry="-360" data-scrub="360" data-tilt="5" data-fit=".78" style="position:sticky;top:12vh;height:76vh"></div>
+          <div data-nzt-anchor="formula" data-ry="-360" data-scrub="140" data-tilt="5" data-fit=".78" style="position:sticky;top:12vh;height:76vh"></div>
         </div>
       </sc-if>
     </div>
@@ -393,7 +393,7 @@ button:focus-visible,a:focus-visible,select:focus-visible{outline:2px solid #F4C
               <sc-if value="{{ s.savePct }}"><span style="padding:7px 11px;border-radius:999px;background:#F4C430;color:#08090B;font:700 11px/1 Poppins,sans-serif">{{ s.savePct }}</span></sc-if>
             </div>
             <div style="position:relative;height:230px;display:flex;align-items:flex-end;justify-content:center">
-              <sc-for list="{{ s.bottles }}" as="b" hint-placeholder-count="1"><img src="{{ still }}" alt="" style="{{ b.style }}"></sc-for>
+              <img src="{{ s.packshot }}" alt="{{ s.packshotAlt }}" width="1600" height="1600" loading="lazy" style="display:block;width:100%;height:100%;object-fit:contain">
             </div>
             <div style="display:flex;flex-direction:column;gap:6px">
               <h3 style="margin:0;font-family:Boldonse,Poppins,sans-serif;font-weight:400;text-transform:uppercase;font-size:22px;line-height:1.4">{{ s.caps }}</h3>
@@ -564,7 +564,7 @@ class Component extends DCLogic {
     // Fit the footer wordmark's viewBox to its actual glyph box so it spans the content width edge to edge.
     const fitMark = () => { const svg = document.querySelector('[data-wordmark]'); if (!svg) return; const t = svg.querySelector('text'), g = document.createElement('canvas').getContext('2d'); g.font = '200px Boldonse'; const m = g.measureText('LIMITLESS'); const l = m.actualBoundingBoxLeft, w = l + m.actualBoundingBoxRight, a = m.actualBoundingBoxAscent, d = m.actualBoundingBoxDescent; if (!(w > 0 && a > 0)) return; t.setAttribute('x', String(l)); svg.setAttribute('viewBox', '0 ' + (-a).toFixed(2) + ' ' + w.toFixed(2) + ' ' + (a + d).toFixed(2)); };
     (document.fonts ? document.fonts.load('200px Boldonse').then(fitMark, fitMark) : Promise.resolve()).then(fitMark); setTimeout(fitMark, 1500);
-    import('./3d/nzt-stage.js').then(m => { if (!this._dead) this._stage = m.mountStage({ base: './3d/' }); }).catch(e => console.warn('NZT stage failed to load', e));
+    import('./3d/nzt-stage.js?v=bolts-20261017c').then(m => { if (!this._dead) this._stage = m.mountStage({ base: './3d/' }); }).catch(e => console.warn('NZT stage failed to load', e));
   }
   componentWillUnmount() {
     this._dead = true;
@@ -579,7 +579,12 @@ class Component extends DCLogic {
     const size = this.state.size || this.props.defaultSize || '30';
     const freq = v.sel.freq;
     const sc = N.calc(size, 'sub', freq), oc = N.calc(size, 'once', freq);
-    v.sizes.forEach(s => { s.perShort = s.perCap.replace(' / capsule', ' / cap'); });
+    v.sizes.forEach(s => {
+      s.perShort = s.perCap.replace(' / capsule', ' / cap');
+      const count = s.bottles.length;
+      s.packshot = 'assets/nzt48-studio-' + count + '-bottle.webp';
+      s.packshotAlt = count + (count === 1 ? ' NZT48 bottle' : ' NZT48 bottles') + ' — studio packaging render';
+    });
     const SCN = ['r-diagonal', 'l-twohands', 'm-shoulder', 'r-closeup', 'l-morning', 'm-strength', 'l-kitchen', 'r-stretch'];
     v.scenarios = v.scenarios.map((u, i) => Object.assign({}, u, { image: 'assets/photos/' + SCN[i % SCN.length] + '.webp' }));
     return Object.assign(v, {
