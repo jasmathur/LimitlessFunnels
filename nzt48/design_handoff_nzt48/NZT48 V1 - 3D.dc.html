@@ -625,7 +625,7 @@ class Component extends DCLogic {
     Object.assign(v, {
       ddRelease: () => { this._ddAt = Date.now(); if (held) this.setState({ ddHold: false }); },
       ddSection: { position: 'relative', overflow: 'hidden', background: '#08090B', minHeight: wide ? 'clamp(660px, 94vh, 920px)' : 'auto', display: 'flex' },
-      ddStage: wide ? { position: 'absolute', top: 0, right: 0, bottom: 0, width: '64%' } : { position: 'absolute', top: 0, left: 0, right: 0, height: photoH },
+      ddStage: wide ? { position: 'absolute', top: 0, right: 0, bottom: 0, width: '64%', overflow: 'hidden' } : { position: 'absolute', top: 0, left: 0, right: 0, height: photoH, overflow: 'hidden' },
       ddShade: { position: 'absolute', inset: 0, background: wide
         ? 'linear-gradient(90deg,#08090B 0%,rgba(8,9,11,.82) 16%,rgba(8,9,11,.25) 46%,rgba(8,9,11,0) 70%),linear-gradient(0deg,rgba(8,9,11,.92) 0%,rgba(8,9,11,0) 42%),linear-gradient(180deg,#08090B 0%,rgba(8,9,11,0) 16%)'
         : 'linear-gradient(180deg,rgba(8,9,11,.35) 0%,rgba(8,9,11,0) 30%,rgba(8,9,11,.7) 66%,#08090B 100%)' },
