@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- assign lxa = 'lx-nzt-support.js' | asset_url | split: 'lx-nzt-support.js' | first -%}
+<base href="{{ lxa }}">
+<title>NZT48 Original · The Limitless Pill · Limitless X</title>
+<meta name="robots" content="noindex,nofollow">
+{{ content_for_header }}
+<script>
+/* With <base> pointing at the asset folder, plain #anchors and version links would leave the page: route them here instead. */
+addEventListener('click', function (e) {
+  if (e.defaultPrevented) return;
+  var a = e.target.closest && e.target.closest('a[href]'); if (!a) return;
+  var h = a.getAttribute('href');
+  if (h.charAt(0) === '#') { e.preventDefault(); var el = h.length > 1 && document.querySelector(h); if (el) el.scrollIntoView({ behavior: 'smooth' }); return; }
+  if (h.indexOf('view=nzt48') > -1) { e.preventDefault(); var u = new URL(h, location.origin), pt = new URLSearchParams(location.search).get('preview_theme_id'); if (pt) u.searchParams.set('preview_theme_id', pt); location.href = u.pathname + u.search + u.hash; }
+});
+</script>
+</head>
+<body>
+{{ content_for_layout }}
+</body>
+</html>

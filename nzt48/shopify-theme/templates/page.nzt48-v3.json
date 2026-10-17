@@ -1,0 +1,12 @@
+{
+  "layout": "lx-nzt",
+  "sections": {
+    "main": {
+      "type": "lx-nzt48-v3",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
