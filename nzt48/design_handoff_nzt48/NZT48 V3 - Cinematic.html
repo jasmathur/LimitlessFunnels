@@ -316,15 +316,17 @@ html[data-theme="light"] header .logo,html[data-theme="light"] footer .wm{conten
 html[data-theme="light"] footer .giant{content:url("assets/nzt48-logo-2026-blue.svg");opacity:.1;-webkit-mask-image:none;mask-image:none}
 html[data-theme="light"] .mega img{content:url("assets/nzt48-logo-2026-outline-lightblue.svg");opacity:.35}
 html[data-theme="light"] .mega img:nth-child(even){opacity:.2}
-html[data-theme="light"] .hero{background:#000;--text:#EDE7DA;--soft:#CFC7B7;color:#EDE7DA}
-html[data-theme="light"] .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.72) 78%,#000 100%)}
-html[data-theme="light"] .hero h1{color:#8FA3E8}
-html[data-theme="light"] .hero .rating i{color:#A9B8FF}
-html[data-theme="light"] .mega{margin-top:0;padding-top:4vh}
-html[data-theme="light"] header:not(.up) .logo{content:url("assets/nzt48-logo-2026-white.svg")}
-html[data-theme="light"] header:not(.up) nav a{color:rgba(255,255,255,.88)}
-html[data-theme="light"] header:not(.up) nav a:hover{color:#fff;background:rgba(255,255,255,.14)}
-html[data-theme="light"] header:not(.up) .ibtn{color:#fff;background:rgba(255,255,255,.16)}
+html[data-theme="light"] .hero{background:var(--bg)}
+html[data-theme="light"] .hero video{filter:none}
+html[data-theme="light"] .hero h1{color:var(--gold)}
+html[data-theme="light"].film-dark .hero video{filter:brightness(.82)}
+html[data-theme="light"].film-dark .hero{--text:#EDE7DA;--soft:#CFC7B7;color:#EDE7DA}
+html[data-theme="light"].film-dark .hero::after{background:linear-gradient(180deg,rgba(10,9,8,.2) 0%,rgba(10,9,8,0) 35%,rgba(10,9,8,.75) 78%,var(--bg) 100%)}
+html[data-theme="light"].film-dark .hero h1{color:#8FA3E8}
+html[data-theme="light"].film-dark header:not(.up) .logo{content:url("assets/nzt48-logo-2026-white.svg")}
+html[data-theme="light"].film-dark header:not(.up) nav a{color:rgba(255,255,255,.88)}
+html[data-theme="light"].film-dark header:not(.up) nav a:hover{color:#fff;background:rgba(255,255,255,.14)}
+html[data-theme="light"].film-dark header:not(.up) .ibtn{color:#fff;background:rgba(255,255,255,.16)}
 html[data-theme="light"] .prism{background:#0D1533;--text:#EDE7DA;--soft:#C9D0EA;color:#EDE7DA}
 html[data-theme="light"] .day::after{background:linear-gradient(180deg,rgba(10,9,8,0) 45%,rgba(10,9,8,.92))}
 html[data-theme="light"] .day .cap b{color:#EDE7DA}
@@ -560,8 +562,16 @@ const hdr = $('#hdr');
 ScrollTrigger.create({ start: 30, end: 'max', onToggle: s => hdr.classList.toggle('up', s.isActive) });
 /* Hero film: landscape cut on wide screens, portrait cut on tall ones */
 const film = $('#herofilm'), filmMQ = matchMedia('(max-aspect-ratio: 4/5), (max-width: 760px)');
-const pickFilm = () => { const src = 'assets/nzt48-film-' + (filmMQ.matches ? 'portrait' : 'landscape') + '.mp4'; if (!film.src.endsWith(src)) { film.src = src; film.play().catch(() => {}); } };
+// light theme uses the white cut where one exists (portrait-white still to come, so phones fall back to the dark cut)
+const FILMS = { dark: { landscape: 'landscape', portrait: 'portrait' }, light: { landscape: 'landscape-white', portrait: null } };
+const pickFilm = () => {
+  const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark', shape = filmMQ.matches ? 'portrait' : 'landscape';
+  const name = FILMS[theme][shape] || FILMS.dark[shape], src = 'assets/nzt48-film-' + name + '.mp4';
+  document.documentElement.classList.toggle('film-dark', !name.endsWith('white'));
+  if (!film.src.endsWith(src)) { film.src = src; film.play().catch(() => {}); }
+};
 pickFilm(); filmMQ.addEventListener('change', pickFilm);
+new MutationObserver(pickFilm).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 gsap.to('.hero video', { yPercent: 14, scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 const lock = on => lenis && (on ? lenis.stop() : lenis.start());
 
