@@ -316,7 +316,11 @@ html[data-theme="light"] header .logo,html[data-theme="light"] footer .wm{conten
 html[data-theme="light"] footer .giant{content:url("assets/nzt48-logo-2026-blue.svg");opacity:.1;-webkit-mask-image:none;mask-image:none}
 html[data-theme="light"] .mega img{content:url("assets/nzt48-logo-2026-outline-lightblue.svg");opacity:.35}
 html[data-theme="light"] .mega img:nth-child(even){opacity:.2}
-html[data-theme="light"] .hero h1{color:var(--gold)}
+html[data-theme="light"] .hero{background:#000;--text:#EDE7DA;--soft:#CFC7B7;color:#EDE7DA}
+html[data-theme="light"] .hero::after{background:linear-gradient(180deg,rgba(0,0,0,.25) 0%,rgba(0,0,0,0) 35%,rgba(0,0,0,.72) 78%,#000 100%)}
+html[data-theme="light"] .hero h1{color:#8FA3E8}
+html[data-theme="light"] .hero .rating i{color:#A9B8FF}
+html[data-theme="light"] .mega{margin-top:0;padding-top:4vh}
 html[data-theme="light"] header:not(.up) .logo{content:url("assets/nzt48-logo-2026-white.svg")}
 html[data-theme="light"] header:not(.up) nav a{color:rgba(255,255,255,.88)}
 html[data-theme="light"] header:not(.up) nav a:hover{color:#fff;background:rgba(255,255,255,.14)}
