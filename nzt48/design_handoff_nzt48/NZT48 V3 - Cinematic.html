@@ -769,7 +769,8 @@ measure(); addEventListener('resize', measure); imgs[0].addEventListener('load',
 const wrap = v => ((v % total) + total) % total;
 function place() { // every card sits at its slot plus the shared offset, wrapped so the loop never ends
   cards.forEach((c, i) => {
-    const x = wrap(i * step + car.x + step) - step + startX;
+    const lead = Math.ceil((startX + cards[0].offsetWidth) / step) * step; // wrap point sits fully off-screen on the left, so no card vanishes in view
+    const x = wrap(i * step + car.x + lead) - lead + startX;
     c.style.transform = `translate3d(${x}px,0,0)`;
     const n = (x + step / 2) / innerWidth - .5; imgs[i].style.transform = `translate3d(${(-n * 7).toFixed(2)}%,0,0)`; // depth: photos drift against the card
   });
