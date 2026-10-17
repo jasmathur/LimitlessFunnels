@@ -53,7 +53,7 @@
     var box = document.createElement('div');
     box.id = 'lx-theme-switch';
     box.setAttribute('role', 'group'); box.setAttribute('aria-label', 'Colour theme');
-    box.style.cssText = 'position:fixed;left:16px;bottom:' + (innerWidth < 900 ? '88px' : '16px') + ';z-index:2147483000;display:flex;gap:4px;padding:5px;border-radius:999px;background:#111;box-shadow:0 10px 30px rgba(0,0,0,.4);font:600 13px/1 Poppins,Arial,sans-serif';
+    box.style.cssText = 'position:fixed;left:16px;bottom:' + (innerWidth < 900 ? '140px' : '16px') + ';z-index:2147483000;display:flex;gap:4px;padding:5px;border-radius:999px;background:#111;box-shadow:0 10px 30px rgba(0,0,0,.4);font:600 13px/1 Poppins,Arial,sans-serif';
     var opts = [['dark', 'Dark'], ['light', 'Light']], btns = [];
     var paint = function () { btns.forEach(function (b) { var on = b.dataset.t === theme; b.setAttribute('aria-pressed', on); b.style.background = on ? (theme === 'light' ? '#26357A' : '#E2C675') : 'rgba(255,255,255,.1)'; b.style.color = on && theme === 'dark' ? '#111' : '#fff'; }); };
     opts.forEach(function (o) {

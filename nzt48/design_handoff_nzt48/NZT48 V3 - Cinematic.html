@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NZT48 Original · The Limitless Pill · Limitless X</title>
 <meta name="description" content="NZT48 Original: a once-daily nootropic capsule with the 750mg NZT-48 Blend. 30, 60 and 90 capsule options.">
-<!-- Stack: Three.js (3d/vendor) · GSAP 3 + ScrollTrigger · Lenis smooth scroll. Hero footage: Pexels (free licence). -->
+<!-- Stack: Three.js (3d/vendor) · GSAP 3 + ScrollTrigger · Lenis smooth scroll. Hero film: assets/nzt48-film-landscape.mp4 + nzt48-film-portrait.mp4. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
-<script src="./version-switch.js?v=theme2"></script>
+<script src="./version-switch.js?v=theme3"></script>
 <script src="./nzt48-shared.js?v=theme1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -69,7 +69,7 @@ header .btn .arw{width:30px;height:30px}
 
 /* Hero */
 .hero{position:relative;height:100svh;min-height:640px;overflow:hidden;display:flex;align-items:flex-end}
-.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(.3) contrast(1.08) brightness(.6)}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.82)}
 .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--t10_9_8),.2) 0%,rgba(var(--t10_9_8),0) 35%,rgba(var(--t10_9_8),.75) 78%,var(--bg) 100%)}
 .hero .in{position:relative;z-index:2;width:100%;max-width:1440px;margin:0 auto;padding:0 var(--pad) clamp(56px,11vh,120px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:40px;align-items:end}
 .hero h1{margin:0;font-size:clamp(34px,5vw,84px);line-height:1.3;text-wrap:balance}
@@ -354,7 +354,7 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
 
 <main>
   <section class="hero" data-section="hero">
-    <video autoplay muted loop playsinline src="https://videos.pexels.com/video-files/11652770/11652770-hd_1920_1080_24fps.mp4"></video>
+    <video id="herofilm" autoplay muted loop playsinline preload="auto" aria-label="NZT48 Original brand film"></video>
     <div class="in">
       <h1 class="bebas">The Limitless Pill</h1>
       <div class="side">
@@ -490,7 +490,7 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
     <div><h4>Support</h4><a href="../../pages/returns-exchanges/index.html">Returns policy</a><a href="/policies/privacy-policy">Privacy</a><a href="/policies/terms-of-service">Terms</a></div>
     <p class="legal" id="fda"></p>
     <p class="legal" id="warn"></p>
-    <p class="legal">“The Limitless Pill” is a Limitless X campaign name for NZT48 Original. NZT48 is not affiliated with, sponsored by or endorsed by any film, television production, studio or actor. Individual results vary. Hero footage from Pexels. © 2026 Limitless X</p>
+    <p class="legal">“The Limitless Pill” is a Limitless X campaign name for NZT48 Original. NZT48 is not affiliated with, sponsored by or endorsed by any film, television production, studio or actor. Individual results vary. © 2026 Limitless X</p>
   </div>
   <img class="giant" src="assets/nzt48-logo-2026.svg" alt="" aria-hidden="true">
 </footer>
@@ -554,6 +554,10 @@ document.addEventListener('click', e => { const a = e.target.closest('[data-scro
 
 const hdr = $('#hdr');
 ScrollTrigger.create({ start: 30, end: 'max', onToggle: s => hdr.classList.toggle('up', s.isActive) });
+/* Hero film: landscape cut on wide screens, portrait cut on tall ones */
+const film = $('#herofilm'), filmMQ = matchMedia('(max-aspect-ratio: 4/5), (max-width: 760px)');
+const pickFilm = () => { const src = 'assets/nzt48-film-' + (filmMQ.matches ? 'portrait' : 'landscape') + '.mp4'; if (!film.src.endsWith(src)) { film.src = src; film.play().catch(() => {}); } };
+pickFilm(); filmMQ.addEventListener('change', pickFilm);
 gsap.to('.hero video', { yPercent: 14, scale: 1.06, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 const lock = on => lenis && (on ? lenis.stop() : lenis.start());
 
