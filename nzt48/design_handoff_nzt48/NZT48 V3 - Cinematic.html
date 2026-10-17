@@ -304,7 +304,8 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   .hero .card .from{flex-direction:row;align-items:baseline;gap:8px}
   .hero .card .btn{justify-content:space-between}
   .cfg{grid-template-columns:1fr;min-height:0}
-  .stage{height:52vh;min-height:340px}
+  .stage{height:58vh;min-height:380px}
+  .stage .anchor{top:5%;bottom:9%;left:2%;right:2%}
   .inside,.faq,.steps{grid-template-columns:1fr}
   .inside .intro,.faq .intro{position:static}
   .shots{height:44vh;order:-1}
@@ -318,7 +319,12 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   .prism .anchor{left:50%;top:60%;width:52vw;height:52vw}
   #lb .box{grid-template-columns:1fr;overflow:auto}
   #lb .box img{max-height:50svh}
-  .final video{width:min(80vw,380px)}
+  .final{overflow:hidden}
+  .final video{width:155vw;max-width:none;margin:-16vh 0 -10vh}  /* the film frame is mostly empty space around the bottle: crop it */
+  .tokens{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tok{height:auto;min-height:46px;padding:10px 12px;border-radius:14px;font-size:13.5px;line-height:1.25;text-align:left;align-items:center}
+  .tok::before{flex:none}
+  .hcard{width:100%}
   #cart aside{top:auto;left:0;width:100%;max-height:88svh;border-radius:24px 24px 0 0;transform:translateY(100%);padding-top:12px}
   #cart .grab{display:block;width:44px;height:5px;border-radius:3px;background:var(--line2);margin:0 auto 4px}
   #toast{top:76px;bottom:auto;transform:translate(-50%,calc(-100% - 120px))}
@@ -950,7 +956,8 @@ gsap.ticker.add(() => {
       a.root.rotation.set(.06, (reduce ? 0 : t * .25) + spin, 0);
       const n = stageCount;
       a.root.children.forEach((b, i) => { // bottles slide into place or shrink away as the size changes
-        const on = i < n, d = i - (n - 1) / 2, s = on ? (n === 1 ? .66 : n === 2 ? .6 : .54) : .001;
+        const m = innerWidth < 900 ? 1.3 : 1; // phones: bottles fill the stage
+        const on = i < n, d = i - (n - 1) / 2, s = on ? (n === 1 ? .66 : n === 2 ? .6 : .54) * m : .001;
         b.position.lerp(tmp.set(on ? d * .4 : 0, 0, on ? -Math.abs(d) * .22 : -.4), .12);
         b.rotation.y += ((on ? d * .28 : 0) - b.rotation.y) * .12;
         b.scale.setScalar(b.scale.x + (s * b.userData.u - b.scale.x) * .12);

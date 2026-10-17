@@ -28,3 +28,13 @@ because the designs use `{{ }}` templates. Don't hand-edit `shopify-theme/`; cha
 
 This is a staging build (the designs' own runtime, unchanged). A production build should render server-side
 and wire real cart/checkout like the Super Greens build.
+
+## Staging log
+**2026-10-17 (latest push)**
+- V3: hero plays the brand film clean (white cut in Light, dark cut in Dark; landscape on desktop, portrait on phones) with the offer in a frosted bar (title + rating, from-price, Build your supply).
+- V3: Dark/Light theme (light = cream & brand blue; prism block stays navy), endless GSAP carousel (drag, fling, arrows), 3D capsule tags you can drag to spin, interactive prism (light follows the cursor on desktop).
+- V3 phones: bigger bottles in Build your supply and Start with one capsule; ingredients as a two-column grid.
+- V1 phones: bottle ~1.8x and pinned to its slot (no longer floats over text), tighter spacing. V1 has the same Dark/Light theme.
+- V2: deep navy footer.
+- Preview controls: V1/V2/V3 switcher + Dark/Light pill on desktop; on phones only a small sun/moon icon.
+- Known: checkout is off on staging (Add to cart / checkout don't place orders). Store tracking pixels log console errors that aren't from these pages.
