@@ -71,21 +71,25 @@ header .btn .arw{width:30px;height:30px}
 /* Hero: the film plays clean (no wash over it); one frosted card carries the offer */
 .hero{position:relative;height:100svh;min-height:640px;overflow:hidden;background:#000}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero .card{position:absolute;z-index:2;left:50%;bottom:clamp(20px,4vh,40px);width:min(1040px,calc(100vw - 2 * var(--pad)));margin-left:calc(min(1040px,calc(100vw - 2 * var(--pad))) / -2);display:grid;grid-template-columns:minmax(0,1.2fr) auto auto;align-items:center;gap:12px 32px;padding:18px 18px 18px 28px;border-radius:24px;
+.hero .card{position:absolute;z-index:2;left:50%;bottom:clamp(20px,4vh,40px);width:min(1040px,calc(100vw - 2 * var(--pad)));margin-left:calc(min(1040px,calc(100vw - 2 * var(--pad))) / -2);display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px 32px;padding:18px 18px 18px 28px;border-radius:24px;
   color:#EDE7DA;background:rgba(14,12,10,.42);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 24px 60px -24px rgba(0,0,0,.55);
   opacity:0;transform:translateY(18px);animation:heroCard 1s var(--ease) .5s forwards}
 @keyframes heroCard{to{opacity:1;transform:none}}
-.hero .card .txt{display:flex;flex-direction:column;gap:4px;min-width:0}
+.hero .card .txt{display:flex;flex-direction:column;gap:8px;min-width:0}
+.hero .card .titlerow{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
 .hero .card h1{margin:0;font-size:clamp(18px,1.5vw,24px);line-height:1.3}
 .hero .card p{margin:0;font:400 14px/1.5 Inter;color:inherit;opacity:.82;max-width:52ch}
-.hero .card .meta{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
-.hero .card .from{font:500 13px/1.3 Inter;opacity:.8}
-.hero .card .from b{font:400 18px/1.2 Boldonse,sans-serif;opacity:1;margin-left:4px}
+.hero .card .from{display:flex;flex-direction:column;align-items:flex-end;font:500 12px/1.3 Inter;letter-spacing:.04em;text-transform:uppercase}
+.hero .card .from b{font:400 clamp(24px,2vw,32px)/1.25 Boldonse,sans-serif;letter-spacing:0;text-transform:none}
 .hero .card .btn{gap:18px}
-.rating{display:inline-flex;align-items:center;gap:10px;font:500 13.5px/1 Inter;color:inherit;opacity:.9}
+.rating{display:inline-flex;flex-direction:column;gap:4px;font:500 12px/1.2 Inter;color:inherit}
+.rating .r1{display:flex;align-items:center;gap:6px}
+.rating .r1 b{font:600 14px/1 Inter}
+.rating .r2{opacity:.75}
 .rating i{display:flex;gap:2px;color:var(--gold)}
 html:not(.film-dark) .hero .card{color:#1C1C21;background:rgba(255,255,255,.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.8),0 24px 60px -28px rgba(28,28,33,.35)}
 html:not(.film-dark) .hero{background:#F4F2EE}
+html[data-theme="light"]:not(.film-dark) .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(250,246,238,0),rgba(250,246,238,.55) 55%,var(--bg))}
 html.film-dark .hero .rating i{color:#FFD25E}
 
 /* NZT-48 mega strip: outline logo drifting between hero and shop, fading into the black */
@@ -297,7 +301,7 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   header .logo{height:16px}
   .wide-only{display:none}
   .hero .card{left:16px;right:16px;width:auto;margin-left:0;bottom:calc(16px + env(safe-area-inset-bottom));padding:18px;grid-template-columns:1fr;gap:14px}
-  .hero .card .meta{flex-direction:row;justify-content:space-between;width:100%}
+  .hero .card .from{flex-direction:row;align-items:baseline;gap:8px}
   .hero .card .btn{justify-content:space-between}
   .cfg{grid-template-columns:1fr;min-height:0}
   .stage{height:52vh;min-height:340px}
@@ -368,9 +372,12 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
   <section class="hero" data-section="hero">
     <video id="herofilm" autoplay muted loop playsinline preload="auto" aria-label="NZT48 Original brand film"></video>
     <div class="card">
-      <div class="txt"><h1 class="bebas">NZT48 Original</h1>
-      <p>The Limitless Pill. A once-daily nootropic capsule with the 750mg NZT-48™ Blend.*</p></div>
-      <div class="meta"><span class="rating"><i aria-hidden="true" id="stars"></i><span id="ratingtxt">4.9 · 5,100+ reviews</span></span><span class="from">From<b id="herofrom">$47.96</b></span></div>
+      <div class="txt">
+        <div class="titlerow"><h1 class="bebas">NZT48 Original</h1>
+          <span class="rating" aria-label="Rated 4.9 out of 5"><span class="r1"><i aria-hidden="true" id="stars"></i><b id="ratingval">4.9</b></span><span class="r2" id="ratingtxt">5,100+ reviews</span></span></div>
+        <p>The Limitless Pill. A once-daily nootropic capsule with the 750mg NZT-48™ Blend.*</p>
+      </div>
+      <span class="from">From<b id="herofrom">$47.96</b></span>
       <a class="btn pri" href="#shop" data-scroll>Build your supply<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
     </div>
   </section>
@@ -825,7 +832,7 @@ addEventListener('keydown', e => {
 /* ---------- FAQ ---------- */
 $('#qs').innerHTML = D.faq.map((f, i) => `<details${i === 0 ? ' open' : ''}><summary>${f[0]}<i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 1v10M1 6h10"/></svg></i></summary><p>${f[1]}</p></details>`).join('');
 $('#fda').textContent = D.fda; $('#warn').textContent = 'Warning: ' + D.warning;
-$('#ratingtxt').textContent = `${D.reviews.rating} · ${D.reviews.count} reviews`;
+$('#ratingtxt').textContent = `${D.reviews.count} reviews`; $('#ratingval').textContent = D.reviews.rating;
 $('#herofrom').textContent = N.money(N.calc('30', 'sub', 30).total);
 
 /* Gentle entrance for each section's content, from an already-visible state */
