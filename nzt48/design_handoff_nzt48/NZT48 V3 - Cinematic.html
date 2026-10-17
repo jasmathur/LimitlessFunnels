@@ -573,8 +573,8 @@ const hdr = $('#hdr');
 ScrollTrigger.create({ start: 30, end: 'max', onToggle: s => hdr.classList.toggle('up', s.isActive) });
 /* Hero film: landscape cut on wide screens, portrait cut on tall ones */
 const film = $('#herofilm'), filmMQ = matchMedia('(max-aspect-ratio: 4/5), (max-width: 760px)');
-// light theme uses the white cut where one exists (portrait-white still to come, so phones fall back to the dark cut)
-const FILMS = { dark: { landscape: 'landscape', portrait: 'portrait' }, light: { landscape: 'landscape-white', portrait: null } };
+// light theme uses the white cuts
+const FILMS = { dark: { landscape: 'landscape', portrait: 'portrait' }, light: { landscape: 'landscape-white', portrait: 'portrait-white' } };
 const pickFilm = () => {
   const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark', shape = filmMQ.matches ? 'portrait' : 'landscape';
   const name = FILMS[theme][shape] || FILMS.dark[shape], src = 'assets/nzt48-film-' + name + '.mp4';
