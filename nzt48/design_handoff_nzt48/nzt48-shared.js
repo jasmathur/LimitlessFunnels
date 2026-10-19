@@ -1,5 +1,6 @@
-// NZT48 ORIGINAL: shared verified facts, copy lists and commerce logic for V1 + V2.
-// Source: limitlessx.com/products/nzt-48 (product 8231919059246) + official Supplement Facts image on that listing. Snapshot Aug 31 2026, rechecked Oct 8 2026.
+// NZT48 ORIGINAL: shared verified facts, the ONE approved master copy (D.copy) and commerce logic for V1, V2 and V3.
+// Source: limitlessx.com/products/nzt-48 (product 8231919059246) + official Supplement Facts image on that listing. Snapshot Aug 31 2026, rechecked Oct 18 2026.
+// Pages must take customer-facing copy from D / D.copy, never retype it. Rationale + open approvals: copy-audit/COPY-MASTER.md.
 (function () {
   var V = [
     { key: '30', count: 30, bottles: 1, title: '1 Bottle', caps: '30 Capsules', supply: '30-day supply', tag: 'Start Here', price: 59.95, id: 45002639769902, sku: '888-NZT48-30C', freq: 30 },
@@ -24,13 +25,13 @@
   }
 
   var D = {
-    reviews: { rating: '4.9', count: '5,100+', exact: 5148, source: 'Judge.me on limitlessx.com/products/nzt-48 (5,148 reviews, 4.92 avg, Aug 31 2026)' },
+    reviews: { rating: '4.9', count: '5,100+', exact: 5153, source: 'Judge.me on limitlessx.com/products/nzt-48 (5,153 reviews, 4.91 avg, Oct 18 2026)' },
     blend: ['Alpha GPC', 'EGCG', 'Caffeine HCL', 'Guarana', '5HTP', 'Theobromine', 'Benfotiamine', 'DL Phenylalanine', 'Acetyl-L-carnitine', 'N-acetyl-L-tyrosine (NALT)', 'Ginkgo Biloba', 'Bacopaside', 'Ashwagandha', 'L-Theanine', 'NADH', 'Phosphatidylserine', 'Uridine-5 Monophosphate', 'B-Complex', 'Rhodiola ext', 'Mucuna Pruriens 99% Ext', 'Rauwolcine', 'Piperine', 'Huperzine A'],
     benefits: [
-      { n: '01', t: 'Alertness', d: 'Caffeine HCL and guarana, two caffeine sources, to help you feel awake and alert.*' },
-      { n: '02', t: 'Focus & Attention', d: 'Alpha GPC, L-Theanine and N-Acetyl-L-Tyrosine, included for focus support.*' },
-      { n: '03', t: 'Mental Energy', d: 'B-Complex, Benfotiamine and Acetyl-L-Carnitine for mental energy support.*' },
-      { n: '04', t: 'Everyday Stress', d: 'Ashwagandha and Rhodiola, two adaptogens traditionally used for everyday stress.*' }
+      { n: '01', t: 'Alertness', d: 'Caffeine HCL and guarana, two caffeine sources, to help you feel more awake and alert.*' },
+      { n: '02', t: 'Calm Focus', d: 'L-Theanine, an amino acid found in tea, paired with the caffeine for focus support.*' },
+      { n: '03', t: 'Cognitive Support', d: 'Alpha GPC provides choline, alongside Bacopaside, Ginkgo Biloba and Phosphatidylserine for cognitive support.*' },
+      { n: '04', t: 'Everyday Stress', d: 'Ashwagandha and Rhodiola, two adaptogens traditionally used to support your response to everyday stress.*' }
     ],
     ingredients: [
       { name: 'Caffeine HCL + Guarana', what: 'Two caffeine sources', research: 'Caffeine is one of the most studied compounds for alertness and reaction time in healthy adults.', say: 'Helps you feel more alert.* The caffeine amount per capsule is not listed separately on the label.' },
@@ -45,13 +46,13 @@
     alsoIn: 'EGCG, 5HTP, Theobromine, Benfotiamine, DL Phenylalanine, Acetyl-L-carnitine, N-acetyl-L-tyrosine (NALT), NADH, Uridine-5 Monophosphate, B-Complex, Mucuna Pruriens 99% Ext, Rauwolcine and Piperine.',
     scenarios: [
       { t: 'Deep Work', who: 'Developers, writers, analysts', d: 'A long block with notifications off and one problem to solve.' },
-      { t: 'Back-to-Back Calendars', who: 'Founders, executives, managers', d: 'Days where meetings stack up and decisions keep coming.' },
+      { t: 'Back-to-Back Calendars', who: 'Founders, executives, senior leaders', d: 'Days where meetings stack up and decisions keep coming.' },
       { t: 'Presentations', who: 'Working professionals', d: 'Prep time before the pitch, the review or the client call.' },
       { t: 'Creative Projects', who: 'Creators, designers, editors', d: 'Edit days, shoot days and the final push before a deadline.' },
       { t: 'Study Sessions', who: 'Adult students', d: 'Reading, review and practice tests on top of everything else.' },
       { t: 'Competitive Play', who: 'Gamers, 18+', d: 'Ranked sessions and practice blocks that ask for attention.' },
       { t: 'Busy Households', who: 'Parents', d: 'School runs, work and logistics in the same morning.' },
-      { t: 'Active Mornings', who: 'Active adults', d: 'One capsule with breakfast, then on to the rest of the day.' }
+      { t: 'Active Mornings', who: 'Active adults of any age', d: 'One capsule with breakfast, then on to the rest of the day.' }
     ],
     compare: [
       { brand: 'NZT48 Original', maker: 'Limitless X', caps: '1', note: 'Contains caffeine', us: true },
@@ -73,14 +74,120 @@
       ['Can I take it with coffee or other supplements?', 'The label says to avoid using NZT48 Original with any other caffeinated products, which includes coffee, energy drinks and pre-workouts. Ask a healthcare professional before combining it with other supplements.'],
       ['What about medications, pregnancy or health conditions?', 'Do not use it if you are pregnant or nursing, under 18, sensitive to caffeine, or have any known or suspected medical condition. Check with a qualified healthcare professional before use, especially if you take medication. Stop use if you experience rapid heartbeat, dizziness, severe headache or shortness of breath.'],
       ['What should I realistically expect?', 'The caffeine in the formula may help you feel more alert.* The other ingredients are included for focus and mental energy support.* How you respond depends on you, your sleep, your diet and your caffeine tolerance. NZT48 won’t raise your IQ, replace sleep, or guarantee results at work or school.'],
-      ['How does it compare to Alpha BRAIN® or Qualia Mind®?', 'The clearest difference is serving size. NZT48 Original is 1 capsule. The labeled serving for Onnit Alpha BRAIN® capsules is 2 capsules, and Qualia Mind® lists a 6-capsule serving with a suggested 3 to 6. The formulas are different (Alpha BRAIN® is caffeine-free), and we don’t claim NZT48 works better. Serving sizes checked on the brands’ official sites on October 8, 2026.'],
-      ['How do shipping, returns and subscriptions work?', 'Orders of $70 or more ship free within the US. Every order is covered by our 30-day money-back guarantee under our Returns Policy. Subscriptions renew automatically at the frequency you choose until you cancel, and you can skip, reschedule or cancel from your account.']
+      ['How does it compare to Alpha BRAIN® or Qualia Mind®?', 'The clearest difference is serving size. NZT48 Original is 1 capsule. The labeled serving for Onnit Alpha BRAIN® capsules is 2 capsules, and Qualia Mind® lists a 6-capsule serving with a suggested 3 to 6. The formulas are different (Alpha BRAIN® is caffeine-free), and we don’t claim NZT48 works better. Serving sizes checked on the brands’ official sites on October 18, 2026.'],
+      ['How do shipping, returns and subscriptions work?', 'Orders of $70 or more ship free within the US. You can request a return within 30 days of your order date for a refund. Under our Returns Policy, the bottle must come back at least 90% full (27 or more capsules), and the order must be from limitlessx.com. Subscriptions renew automatically at the frequency you choose until you cancel, and you can skip, reschedule or cancel from your account.']
     ],
+    // Identity-only notes for the 13 non-key blend ingredients (no benefit claims). From V3.
+    notes: {
+      'EGCG': 'A catechin found in green tea.',
+      '5HTP': '5-hydroxytryptophan, an amino acid the body makes from tryptophan.',
+      'Theobromine': 'A compound found in cacao, chemically related to caffeine.',
+      'Benfotiamine': 'A fat-soluble form of vitamin B1 (thiamine).',
+      'DL Phenylalanine': 'A mix of the D and L forms of the amino acid phenylalanine.',
+      'Acetyl-L-carnitine': 'An acetylated form of the amino acid L-carnitine.',
+      'N-acetyl-L-tyrosine (NALT)': 'An acetylated form of the amino acid L-tyrosine.',
+      'NADH': 'The reduced form of NAD, a coenzyme made from vitamin B3.',
+      'Uridine-5 Monophosphate': 'A nucleotide, one of the building blocks of RNA.',
+      'B-Complex': 'A group of B vitamins.',
+      'Mucuna Pruriens 99% Ext': 'An extract of velvet bean seeds.',
+      'Rauwolcine': 'A plant alkaloid from Rauvolfia species.',
+      'Piperine': 'The compound that gives black pepper its bite.'
+    },
+    returnsUrl: 'https://www.limitlessx.com/policies/refund-policy',
+    reviewsUrl: 'https://www.limitlessx.com/products/nzt-48#judgeme_product_reviews',
+    // ONE approved master copy. Same words on every page; only line breaks / CSS text-transform may differ.
+    copy: {
+      campaign: 'The Limitless Pill',
+      announce: ['Free US shipping on orders $70+', 'Subscribe & Save up to 20%', '30-day returns', 'One capsule a day'],
+      trust: ['1 capsule per serving', '750mg blend · 23 ingredients', '30-day returns', 'Free US shipping on $70+'],
+      hero: {
+        eyebrow: 'Nootropic dietary supplement · 1 capsule a day',
+        h1: 'The Limitless Pill.',
+        support: 'Focus support in a single daily capsule.*',
+        name: 'NZT48 Original',
+        body: 'NZT48 Original is a once-daily nootropic dietary supplement. Each capsule holds the 750mg NZT-48™ Blend: caffeine for alertness, plus L-Theanine, Alpha GPC, Bacopaside and 19 more ingredients included for focus support.*',
+        note: 'A dietary supplement, not a drug. Contains caffeine. Results vary.'
+      },
+      buy: { h: 'Choose Your Supply', perDay: '1 capsule a day', sub: 'Subscribe & Save', subSmall: 'Skip, reschedule or cancel anytime', once: 'One-Time Purchase', every: 'Deliver every', shipOn: 'This order ships free in the US.', shipAway: '{amount} away from free US shipping.' },
+      cta: { primary: 'Get The Limitless Pill', add: 'Add to Cart', checkout: 'Secure Checkout', shop: 'Shop NZT48', faq: 'Read the FAQ', reviews: 'Read All Reviews' },
+      oneCapsule: {
+        eyebrow: 'Nootropics, explained',
+        h: 'One Capsule Is the Whole Serving',
+        p1: '“Nootropic” is a general term for ingredients people take to support focus, attention and mental energy. Many nootropic products call for two or more capsules per serving.',
+        p2: 'NZT48 Original puts its 23-ingredient blend into one capsule. Take it once a day with water, preferably with a meal. Nothing to measure, mix or count out.',
+        stats: [['Serving size', '1 capsule'], ['Per bottle', '30 servings'], ['Blend per capsule', '750mg'], ['Take with', '8oz water + a meal']]
+      },
+      benefits: { eyebrow: 'What it’s for', h: 'Built for Four Jobs', lede: 'The blend groups its key ingredients around four everyday needs. Here’s what each group is included to support.*' },
+      ingredients: {
+        eyebrow: 'Ingredient deep dive', h: 'What’s Inside, and What the Research Says',
+        lede: 'All 23 ingredients share one 750mg proprietary blend, so the label lists the total, not each amount. Published studies usually test a single ingredient at larger amounts than a blend this size holds. Here’s what that research looks at, and what we can responsibly say about NZT48 Original.',
+        researchLabel: 'What research suggests', sayLabel: 'What we can say', partOf: 'Part of the 750mg blend',
+        alsoLabel: 'Also in the blend:', foot: 'Ingredient research is not a study of NZT48 Original as a finished product.'
+      },
+      routine: {
+        eyebrow: 'How to take it', h: 'Your Daily Routine',
+        steps: [
+          ['Take One Capsule', 'With 8oz of water, preferably with a meal, or as directed by a healthcare professional.'],
+          ['Skip the Extra Caffeine', 'NZT48 Original already contains caffeine. The label says to avoid other caffeinated products, including coffee and energy drinks.'],
+          ['Take It Earlier in the Day', 'A morning or lunchtime capsule keeps the caffeine away from bedtime.']
+        ]
+      },
+      uses: { eyebrow: 'Who it’s for', h: 'Made for Demanding Days', foot: 'For adults 18+. Everyone responds differently, and NZT48 is one part of a routine that also includes sleep, food and movement.' },
+      compare: {
+        eyebrow: 'Capsules per labeled serving', h: 'Fewer Capsules to Take',
+        lede: 'Here’s how many capsules each brand’s label calls one serving. This compares convenience only. Different formulas aren’t interchangeable, and fewer capsules doesn’t mean better results.',
+        foot: 'Serving sizes from each brand’s official product information, checked October 18, 2026: Onnit Alpha BRAIN® (capsules) and Qualia Mind® by Qualia Life Sciences. Alpha BRAIN® and Qualia Mind® are trademarks of their owners, who are not affiliated with Limitless X.'
+      },
+      facts: {
+        eyebrow: 'Full transparency', h: 'The Label, in Full',
+        lede: 'The complete Supplement Facts panel for NZT48 Original, 30 capsules. The 60 and 90 options are two and three of this same bottle.',
+        servingSize: '1 Capsule', servings: '30', blendName: 'NZT-48™ Blend', blendAmt: '750 mg',
+        dv: '**Percent Daily Values are based on a 2,000 calorie diet. †Daily Value not established.',
+        other: 'Gelatin, White #100, Silica, Calcium Carbonate.',
+        allergy: 'Manufactured in a facility that processes milk, soy, and egg protein.',
+        directions: 'Take 1 capsule daily with 8oz of water, preferably with a meal, or as directed by a healthcare professional.'
+      },
+      reviews: { eyebrow: 'Customer rating', line: 'Average rating from {count} reviews of NZT48 Original on limitlessx.com' },
+      bundles: { eyebrow: 'Pick your supply', h: 'Same Capsule, Three Sizes', lede: 'Same capsule in every size. Bigger packages lower the price per capsule.', foot: 'Savings are compared with buying single 30-capsule bottles at $59.95 each.' },
+      plans: {
+        subH: 'Subscribe & Save up to 20%', subRates: '20% off every 30 days · 15% off every 45, 60 or 90 days',
+        subBody: 'Your subscription renews automatically at the frequency you pick until you cancel. Skip, reschedule or cancel anytime from your account.',
+        onceH: 'Buy Once, No Commitment', onceBody: '', // filled below from V so prices never drift
+        both: 'Both options come with the same 30-day return window.'
+      },
+      guarantee: {
+        badge: '30-day returns', h: '30-Day Returns',
+        body: 'Try up to 3 capsules. If NZT48 Original isn’t right for you, request a return within 30 days of your order date for a refund. Send the bottle back with at least 27 capsules, per our Returns Policy. Applies to orders from limitlessx.com.',
+        link: 'Returns Policy'
+      },
+      faq: { eyebrow: 'Questions', h: 'Questions, Answered', lede: 'Straight answers on ingredients, caffeine, sizes and subscriptions.', health: 'For questions about your own health, please talk with your doctor or pharmacist.' },
+      final: { h: 'Start With One Capsule', body: 'NZT48 Original, The Limitless Pill. One capsule a day, every ingredient listed on the label, and a 30-day return window.' },
+      footer: {
+        blurb: 'NZT48 Original, The Limitless Pill. A once-daily nootropic dietary supplement.',
+        legal: '“The Limitless Pill” is a Limitless X campaign name for NZT48 Original. NZT48 is not affiliated with, sponsored by or endorsed by any film, television production, studio or actor. Individual results vary.'
+      },
+      // V3-only sections: the same master messages, adapted. No new claims.
+      v3: {
+        spectrum: { h: 'One Capsule. The Full Blend.', lede: 'All 23 ingredients of the NZT-48™ Blend in a single capsule.' },
+        inside: { h: '23 Ingredients. One Capsule.', lede: 'Every ingredient in the NZT-48™ Blend is listed on the label. Point at any ingredient to see what it is. The gold ones include a short note on what the research looks at.' },
+        standards: { h: 'What You Can Count On', tiles: [['One capsule a day', 'The labeled serving is a single capsule.'], ['Every ingredient listed', 'All 23 ingredients are printed on the label.'], ['Contains caffeine', 'Caffeine HCL and guarana. Skip other caffeine.'], ['30-day returns', 'Under our Returns Policy.']] }
+      }
+    },
     fda: '*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.',
     warning: 'Check with a qualified health care professional before taking this product. Keep out of the reach of children. Do not use if you are sensitive to caffeine, pregnant or nursing, under 18 years of age, or have any known or suspected medical conditions. Avoid using with any other caffeinated products. Discontinue if you experience rapid heartbeat, dizziness, severe headache or shortness of breath. Do not use if safety seal is damaged or missing.'
   };
 
-  function track(event, data) { window.dataLayer = window.dataLayer || []; window.dataLayer.push(Object.assign({ event: event, product: 'nzt-48', funnel: 'nzt48-original' }, data || {})); }
+  D.copy.plans.onceBody = 'Pay ' + V.map(function (x) { return money(x.price); }).join(', ').replace(/, ([^,]*)$/, ' or $1') + ' for ' + V.map(function (x) { return x.count; }).join(', ').replace(/, ([^,]*)$/, ' or $1') + ' capsules. No future charges. Orders of $' + FREE_SHIP + ' or more ship free within the US.';
+
+  // Every event carries the page version (set by the PageView call) and the colour theme, so Cinematic Light/Dark and V1 Light/Dark can be split in tests.
+  // Kept on window, not in this closure: the .dc.html runtime can evaluate this file more than once.
+  function track(event, data) {
+    data = data || {}; if (data.version) window.__nztVersion = data.version;
+    var VERSION = window.__nztVersion || '';
+    var theme = document.documentElement.getAttribute('data-theme') || 'dark';
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push(Object.assign({ event: event, product: 'nzt-48', funnel: 'nzt48-original', version: VERSION, theme: theme, variant_label: VERSION + (document.documentElement.hasAttribute('data-themeable') ? '-' + theme : '') }, data));
+  }
   function utm() {
     try {
       var q = new URLSearchParams(location.search), keep = {};
@@ -119,7 +226,7 @@
     var shipPct = Math.min(100, c.total / FREE_SHIP * 100);
     var cta = pr.ctaLabel || 'Get The Limitless Pill';
     return {
-      cta: cta, D: D, faqs: faqs, sizes: sizes, freqs: freqs, ingredients: D.ingredients, benefits: D.benefits, scenarios: D.scenarios, compare: D.compare.map(function (r) { return Object.assign({ style: T.cmp(r.us), capStyle: T.cmpCaps(r.us), pills: Array.apply(null, { length: +r.caps }).map(function () { return { style: T.pill(r.us) }; }) }, r); }),
+      cta: cta, D: D, copy: D.copy, faqs: faqs, sizes: sizes, freqs: freqs, ingredients: D.ingredients, benefits: D.benefits, scenarios: D.scenarios, compare: D.compare.map(function (r) { return Object.assign({ style: T.cmp(r.us), capStyle: T.cmpCaps(r.us), pills: Array.apply(null, { length: +r.caps }).map(function () { return { style: T.pill(r.us) }; }) }, r); }),
       blendText: D.blend.join(', '), alsoIn: D.alsoIn, fda: D.fda, warning: D.warning, rating: D.reviews.rating, reviewCount: D.reviews.count,
       isSub: sub, isOnce: !sub, segSub: T.seg(sub), segOnce: T.seg(!sub),
       pickSub: function () { set({ plan: 'sub' }, 'SelectPlan', { plan: 'sub' }); }, pickOnce: function () { set({ plan: 'once' }, 'SelectPlan', { plan: 'once' }); },

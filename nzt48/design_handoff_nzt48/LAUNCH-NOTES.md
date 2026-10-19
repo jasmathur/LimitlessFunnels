@@ -1,7 +1,8 @@
 # NZT48 Original: "The Limitless Pill" funnels
 
-Routes: `NZT48 V1 - 3D.dc.html`, `NZT48 V2 - Magazine.dc.html`.
-Shared facts, copy lists and commerce logic: `nzt48-shared.js` (edit there; both pages update).
+Routes: `NZT48 V1 - 3D.dc.html`, `NZT48 V2 - Magazine.dc.html`, `NZT48 V3 - Cinematic.html` (Light + Dark).
+Shared facts, the master copy (`D.copy`) and commerce logic: `nzt48-shared.js` (edit there; all pages update).
+**Oct 18 2026 master-copy pass:** see `copy-audit/COPY-MASTER.md` for decisions and the current launch blockers (they supersede items 5 and 7 below).
 Gummy and Super Greens funnels were not modified.
 
 ## Verified product data (limitlessx.com/products/nzt-48, product 8231919059246)

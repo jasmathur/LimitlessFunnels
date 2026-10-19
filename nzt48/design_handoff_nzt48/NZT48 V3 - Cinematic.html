@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NZT48 Original · The Limitless Pill · Limitless X</title>
-<meta name="description" content="NZT48 Original: a once-daily nootropic capsule with the 750mg NZT-48 Blend. 30, 60 and 90 capsule options.">
+<meta name="description" content="NZT48 Original, The Limitless Pill. A once-daily nootropic dietary supplement.">
 <!-- Stack: Three.js (3d/vendor) · GSAP 3 + ScrollTrigger · Lenis smooth scroll. Hero film: assets/nzt48-film-landscape.mp4 + nzt48-film-portrait.mp4. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <script src="./version-switch.js?v=theme4"></script>
-<script src="./nzt48-shared.js?v=theme1"></script>
+<script src="./nzt48-shared.js?v=master2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.17/dist/lenis.min.js"></script>
@@ -52,13 +52,14 @@ img,video{display:block}
 .ibtn:hover{background:rgba(var(--t237_231_218),.16)}
 
 /* Top nav */
-.bar{position:relative;z-index:60;background:var(--gold);color:var(--bg);text-align:center;font:600 11px/1 Inter;letter-spacing:.14em;text-transform:uppercase;padding:9px 12px}
-header{position:fixed;left:0;right:0;top:30px;z-index:60;transition:top .4s var(--ease),background .3s}
+.bar{position:relative;z-index:60;background:var(--gold);color:var(--bg);text-align:center;font:600 11px/1.45 Inter;letter-spacing:.14em;text-transform:uppercase;padding:8px 12px}
+.bar span+span::before{content:"·";margin:0 .7em}
+header{position:fixed;left:0;right:0;top:var(--barh,30px);z-index:60;transition:top .4s var(--ease),background .3s}
 header.up{top:0;background:rgba(var(--t10_9_8),.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
 header .in{display:flex;align-items:center;gap:28px;padding:14px var(--pad);max-width:1440px;margin:0 auto}
 header .logo{height:20px;width:auto}
 header nav{display:flex;gap:4px;margin-right:auto}
-header nav a{padding:10px 14px;border-radius:999px;font:500 14px/1 Inter;color:var(--soft);text-decoration:none;transition:color .2s,background .2s}
+header nav a{white-space:nowrap;padding:15px 14px;border-radius:999px;font:500 14px/1 Inter;color:var(--soft);text-decoration:none;transition:color .2s,background .2s}
 header nav a:hover{color:var(--text);background:rgba(var(--t237_231_218),.07)}
 header .act{display:flex;align-items:center;gap:10px}
 header .btn{height:46px;padding-left:20px;font-size:11px}
@@ -69,7 +70,7 @@ header .btn .arw{width:30px;height:30px}
 
 /* Hero */
 /* Hero: the film plays clean (no wash over it); one frosted card carries the offer */
-.hero{position:relative;height:100svh;min-height:640px;overflow:hidden;background:#000}
+.hero{position:relative;height:calc(100svh - var(--barh,30px));min-height:520px;overflow:hidden;background:#000}
 .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .hero .card{position:absolute;z-index:2;left:50%;bottom:clamp(20px,4vh,40px);width:min(1040px,calc(100vw - 2 * var(--pad)));margin-left:calc(min(1040px,calc(100vw - 2 * var(--pad))) / -2);display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:12px 32px;padding:18px 18px 18px 28px;border-radius:24px;
   color:#EDE7DA;background:rgba(14,12,10,.42);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 24px 60px -24px rgba(0,0,0,.55);
@@ -77,12 +78,13 @@ header .btn .arw{width:30px;height:30px}
 @keyframes heroCard{to{opacity:1;transform:none}}
 .hero .card .txt{display:flex;flex-direction:column;gap:8px;min-width:0}
 .hero .card .titlerow{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
-.hero .card h1{margin:0;font-size:clamp(18px,1.5vw,24px);line-height:1.3}
-.hero .card p{margin:0;font:400 14px/1.5 Inter;color:inherit;opacity:.82;max-width:52ch}
+.hero .card h1{margin:0;font-size:clamp(26px,2.6vw,42px);line-height:1.2}
+.hero .card .pname{font:600 12px/1.2 Inter;letter-spacing:.14em;text-transform:uppercase}
+.hero .card p{margin:0;font:500 clamp(15px,1.2vw,18px)/1.45 Inter;color:inherit;opacity:.9;max-width:52ch}
 .hero .card .from{display:flex;flex-direction:column;align-items:flex-end;font:500 12px/1.3 Inter;letter-spacing:.04em;text-transform:uppercase}
 .hero .card .from b{font:400 clamp(24px,2vw,32px)/1.25 Boldonse,sans-serif;letter-spacing:0;text-transform:none}
 .hero .card .btn{gap:18px}
-.rating{display:inline-flex;flex-direction:column;gap:4px;font:500 12px/1.2 Inter;color:inherit}
+.rating{display:inline-flex;flex-direction:column;gap:4px;font:500 12px/1.2 Inter;color:inherit;text-decoration:none;min-height:44px;justify-content:center}
 .rating .r1{display:flex;align-items:center;gap:6px}
 .rating .r1 b{font:600 14px/1 Inter}
 .rating .r2{opacity:.75}
@@ -118,11 +120,12 @@ html.film-dark .hero .rating i{color:#FFD25E}
 .row .t b{font:600 15px/1.2 Inter}
 .row .t small{font:400 13px/1.4 Inter;color:var(--mute)}
 .switch{flex:none;width:56px;height:32px;border-radius:16px;border:0;background:var(--line2);cursor:pointer;position:relative;transition:background .3s}
+.switch::before{content:"";position:absolute;inset:-6px -4px}
 .switch::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--text);transition:transform .4s var(--ease)}
 .switch[aria-checked="true"]{background:var(--gold)}
 .switch[aria-checked="true"]::after{transform:translateX(24px);background:var(--bg)}
 .freq{display:flex;flex-wrap:wrap;gap:6px}
-.freq button{height:38px;padding:0 14px;border-radius:999px;border:0;background:rgba(var(--t237_231_218),.06);cursor:pointer;font:500 13px/1 Inter;color:var(--soft);transition:background .2s,color .2s}
+.freq button{height:44px;padding:0 14px;border-radius:999px;border:0;background:rgba(var(--t237_231_218),.06);cursor:pointer;font:500 13px/1 Inter;color:var(--soft);transition:background .2s,color .2s}
 .freq button[aria-checked="true"]{background:var(--text);color:var(--bg)}
 .freq[hidden]{display:none}
 .price{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -171,6 +174,7 @@ html.film-dark .hero .rating i{color:#FFD25E}
 .hcard b{font:400 20px/1.3 Boldonse,sans-serif;text-transform:uppercase}
 .hcard p{margin:0;font:400 14px/1.55 Inter;color:var(--soft)}
 .hcard p.say{color:var(--text)}
+.hcard .hl{display:block;margin-bottom:4px;font:600 10.5px/1.3 Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
 
 /* Steps */
 .steps{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(32px,5vw,88px);align-items:center}
@@ -180,8 +184,8 @@ html.film-dark .hero .rating i{color:#FFD25E}
 .stepper .fill{height:var(--lf,0);background:var(--gold);box-shadow:0 0 12px rgba(var(--t242_179_34),.5);transition:height .7s var(--ease)}
 .step{position:relative;display:block;padding:22px 26px;border-radius:22px;border:0;background:none;text-align:left;cursor:pointer;transition:background .35s,box-shadow .35s}
 .step .n{position:absolute;left:-84px;top:16px;z-index:2;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--bg);box-shadow:inset 0 0 0 1.5px var(--line2);font:400 15px/1 Boldonse,sans-serif;color:var(--mute);transition:background .4s,color .4s,box-shadow .4s}
-.step b{display:block;font:400 clamp(20px,2.3vw,38px)/1.34 Boldonse,sans-serif;text-transform:uppercase;color:rgba(var(--t237_231_218),.3);transition:color .35s}
-.step:hover b{color:rgba(var(--t237_231_218),.6)}
+.step b{display:block;font:400 clamp(20px,2.3vw,38px)/1.34 Boldonse,sans-serif;text-transform:uppercase;color:rgba(var(--t237_231_218),.6);transition:color .35s}
+.step:hover b{color:rgba(var(--t237_231_218),.8)}
 .step p{margin:0;font:400 15px/1.6 Inter;color:var(--soft);max-width:46ch;max-height:0;overflow:hidden;opacity:0;transition:max-height .5s var(--ease),opacity .4s,margin .4s}
 .step .icl{position:absolute;inset:0;border-radius:inherit;overflow:hidden;pointer-events:none}
 .step .ico{position:absolute;right:-20px;bottom:-28px;width:150px;height:150px;color:var(--gold);opacity:0;transform:translateY(16px) rotate(8deg);transition:opacity .6s,transform .8s var(--ease)}
@@ -235,6 +239,8 @@ html.film-dark .hero .rating i{color:#FFD25E}
 .tile b{display:block;font:400 clamp(18px,1.9vw,32px)/1.36 Boldonse,sans-serif;text-transform:uppercase}
 .tile span{display:block;margin-top:10px;font:400 clamp(14px,1vw,16px)/1.55 Inter;color:var(--mute);max-width:34ch}
 .tile.big{grid-row:span 2;background:var(--c0F0D0A)}
+.bento .tile:nth-child(2){grid-column:span 4}
+a.tile{color:inherit;text-decoration:none}
 .tile.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.55);transition:transform 1.4s var(--ease)}
 .tile.big:hover img{transform:scale(1.05)}
 .tile.big::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--t10_9_8),0) 30%,rgba(var(--t10_9_8),.9))}
@@ -264,6 +270,7 @@ footer{border-top:1px solid var(--line);overflow:hidden}
 footer .cols{padding:56px var(--pad) 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:36px;max-width:1440px;margin:0 auto}
 footer h4{margin:0 0 14px;font:600 11px/1 Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
 footer a,footer p{display:block;margin:0 0 9px;font:400 13px/1.6 Inter;color:var(--mute);text-decoration:none}
+footer a{display:flex;align-items:center;min-height:44px;margin:0}
 footer a:hover{color:var(--text)}
 footer .legal{grid-column:1/-1;font-size:12px;max-width:120ch}
 footer .wm{height:24px;width:auto;margin-bottom:16px}
@@ -287,13 +294,15 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
 #cart.show aside{transform:none}
 #cart .grab{display:none}
 #cart .sizes{display:flex;flex-direction:column;gap:8px}
-#cart .sizes button{min-height:52px;border-radius:14px;border:0;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;font:500 14px/1.3 Inter;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;text-align:left}
+#cart .sizes button{gap:12px;min-height:52px;border-radius:14px;border:0;background:var(--bg);box-shadow:inset 0 0 0 1px var(--line);cursor:pointer;font:500 14px/1.3 Inter;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;text-align:left}
 #cart .sizes button.on{box-shadow:inset 0 0 0 1.5px var(--gold);color:var(--gold)}
 #cart .tot{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding-top:16px;gap:12px}
 #cart .tot b{font:400 28px/1.2 Boldonse,sans-serif}
 #cart .note{padding:12px;border-radius:12px;background:var(--bg);font:400 13px/1.5 Inter;color:var(--soft)}
-#cart .btn.pri{height:60px;justify-content:space-between}
+#cart .btn.pri{flex:none;height:60px;justify-content:space-between}
+#cart .cfoot{position:sticky;bottom:-24px;margin:auto -24px -24px;padding:16px 24px calc(24px + env(safe-area-inset-bottom));background:var(--panel);box-shadow:0 -1px 0 var(--line),0 -18px 30px -18px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:14px}
 
+@media (max-width:1180px){header nav{display:none}header .act{margin-left:auto}}
 @media (max-width:900px){
   header nav{display:none}
   header .act{margin-left:auto}
@@ -306,12 +315,12 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   .cfg{grid-template-columns:1fr;min-height:0}
   .stage{height:58vh;min-height:380px}
   .stage .anchor{top:5%;bottom:9%;left:2%;right:2%}
-  .inside,.faq,.steps{grid-template-columns:1fr}
+  .inside,.faq,.steps{grid-template-columns:minmax(0,1fr)}
   .inside .intro,.faq .intro{position:static}
   .shots{height:44vh;order:-1}
   .stepper{padding-left:60px}.stepper .rail,.stepper .fill{left:19px}.step .n{left:-60px;width:40px;height:40px;font-size:12px;top:18px}
   .bento{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;height:auto;max-height:none}
-  .tile{grid-column:span 1;min-height:200px}
+  .tile,.bento .tile:nth-child(2){grid-column:span 1;min-height:200px}
   .tile.big{grid-column:span 2;grid-row:auto;min-height:340px}
   .podium .anchor{width:100vw;top:22%;height:60%}
   .prism{height:88svh}
@@ -321,8 +330,8 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   #lb .box img{max-height:50svh}
   .final{overflow:hidden}
   .final video{width:155vw;max-width:none;margin:-16vh 0 -10vh}  /* the film frame is mostly empty space around the bottle: crop it */
-  .tokens{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .tok{height:auto;min-height:46px;padding:10px 12px;border-radius:14px;font-size:13.5px;line-height:1.25;text-align:left;align-items:center}
+  .tokens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .tok{height:auto;min-height:46px;padding:10px 12px;border-radius:14px;font-size:13.5px;line-height:1.25;text-align:left;align-items:center;overflow-wrap:anywhere}
   .tok::before{flex:none}
   .hcard{width:100%}
   #cart aside{top:auto;left:0;width:100%;max-height:88svh;border-radius:24px 24px 0 0;transform:translateY(100%);padding-top:12px}
@@ -330,10 +339,10 @@ footer .giant{display:block;width:calc(100% - 2 * var(--pad));max-width:1440px;h
   #toast{top:76px;bottom:auto;transform:translate(-50%,calc(-100% - 120px))}
   #toast p small{display:none}
 }
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.hero .card{opacity:1;transform:none}}
 
 :root{--c17130E:#17130E;--c0E0C0A:#0E0C0A;--c1D1913:#1D1913;--c0F0D0A:#0F0D0A;--c201C16:#201C16;--t242_179_34:242,179,34;--t237_231_218:237,231,218;--t10_9_8:10,9,8}
-html[data-theme="light"]{--bg:#FAF6EE;--panel:#F2ECE0;--panel2:#EAE2D2;--line:#E2D9C8;--line2:#D4C9B3;--mute:#6B6F7B;--soft:#3C404C;--text:#1C1C21;--gold:#26357A;--gold2:#3A4FA8;--c17130E:#F3EDE1;--c0E0C0A:#ECE4D4;--c1D1913:#FBF8F2;--c0F0D0A:#E9E1D1;--c201C16:#FBF8F2;--t242_179_34:38,53,122;--t237_231_218:28,28,33;--t10_9_8:250,246,238}
+html[data-theme="light"]{--bg:#FAF6EE;--panel:#F2ECE0;--panel2:#EAE2D2;--line:#E2D9C8;--line2:#D4C9B3;--mute:#5C606C;--soft:#3C404C;--text:#1C1C21;--gold:#26357A;--gold2:#3A4FA8;--c17130E:#F3EDE1;--c0E0C0A:#ECE4D4;--c1D1913:#FBF8F2;--c0F0D0A:#E9E1D1;--c201C16:#FBF8F2;--t242_179_34:38,53,122;--t237_231_218:28,28,33;--t10_9_8:250,246,238}
 /* Light theme: logos in brand blue, dark blocks where the content needs a night backdrop */
 html[data-theme="light"] header .logo,html[data-theme="light"] footer .wm{content:url("assets/nzt48-logo-2026-blue.svg")}
 html[data-theme="light"] footer .giant{content:url("assets/nzt48-logo-2026-blue.svg");opacity:.1;-webkit-mask-image:none;mask-image:none}
@@ -350,41 +359,108 @@ html[data-theme="light"] .day .cap em{color:#A9B8FF}
 html[data-theme="light"] .tile.big::after{background:linear-gradient(180deg,rgba(13,21,51,0) 25%,rgba(13,21,51,.92))}
 html[data-theme="light"] .tile.big b{color:#fff}
 html[data-theme="light"] .tile.big span{color:#C9D0EA}
-html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
+html[data-theme="light"] .tile.big svg{color:#A9B8FF}
+/* Section heads for the added sections */
+.shead{display:flex;flex-direction:column;gap:16px;max-width:760px}
+.eye{font:600 12px/1.3 Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+/* Benefits: four numbered panels */
+.bens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:40px}
+.ben{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:clamp(22px,2.2vw,34px);border-radius:28px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line);min-height:340px;transition:box-shadow .45s}
+.ben::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 70% at 15% 0%,rgba(var(--t242_179_34),.16),transparent 65%);pointer-events:none}
+.ben:hover{box-shadow:inset 0 0 0 1px rgba(var(--t242_179_34),.7),0 0 40px -6px rgba(var(--t242_179_34),.3)}
+.ben .n{font:400 clamp(40px,4vw,64px)/1 Boldonse,sans-serif;color:var(--gold);margin-bottom:28px}
+.ben b{font:400 clamp(18px,1.6vw,26px)/1.3 Boldonse,sans-serif;text-transform:uppercase;margin-top:auto}
+.ben p{margin:0;font:400 15px/1.6 Inter;color:var(--soft)}
+/* Comparison: capsules per labeled serving */
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+.cmpc{display:flex;flex-direction:column;gap:18px;padding:clamp(22px,2.4vw,36px);border-radius:28px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--line)}
+.cmpc.us{background:linear-gradient(140deg,rgba(var(--t242_179_34),.16),rgba(var(--t242_179_34),.03) 70%),var(--panel);box-shadow:inset 0 0 0 1.5px var(--gold)}
+.cmpc .pills{display:flex;align-items:center;gap:6px;min-height:52px;color:var(--mute)}
+.cmpc.us .pills{color:var(--gold)}
+.cmpc .pills b{font:400 clamp(28px,2.6vw,40px)/1 Boldonse,sans-serif;margin-left:10px;color:var(--text)}
+.cmpc .bn{font:400 clamp(18px,1.6vw,24px)/1.3 Boldonse,sans-serif;text-transform:uppercase}
+.cmpc small{font:400 13px/1.4 Inter;color:var(--mute)}
+.cmpc .nt{margin-top:auto;font:600 11px/1.3 Inter;letter-spacing:.12em;text-transform:uppercase;color:var(--soft)}
+/* Supplement Facts: the real label, black on white in both themes */
+.factsw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,96px);align-items:center}
+.label{margin:0;justify-self:center;width:100%;max-width:500px;background:#fff;color:#000;border:1px solid #000;padding:clamp(16px,2.4vw,26px);font-family:Helvetica,Arial,sans-serif;box-shadow:0 40px 80px -40px rgba(0,0,0,.8)}
+.label .lt{font-weight:900;font-size:clamp(26px,3.2vw,36px);line-height:1;letter-spacing:-.01em}
+.label .ls{font-weight:700;font-size:14px;line-height:1.35;margin-top:6px}
+.label .lr9{height:9px;background:#000;margin:9px 0 6px}
+.label .lr4{height:4px;background:#000;margin:6px 0 8px}
+.label .lh{display:flex;justify-content:space-between;font-weight:800;font-size:13px}
+.label .lb{display:grid;grid-template-columns:1fr auto 24px;gap:8px;font-weight:800;font-size:14px}
+.label .lb span:last-child{text-align:right}
+.label .lbl{margin:6px 0 0;font-size:13px;line-height:1.45}
+.label .lsm{margin:8px 0 0;font-size:12.5px;line-height:1.45}
+.fside{display:flex;flex-direction:column;gap:18px}
+.fdl{margin:0;border-top:1px solid var(--line)}
+.fdl dt{padding-top:16px;font:600 12px/1.3 Inter;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.fdl dd{margin:6px 0 0;padding-bottom:16px;border-bottom:1px solid var(--line);font:400 14px/1.6 Inter;color:var(--soft)}
+.final .lede{max-width:56ch}
+/* Mobile sticky buy bar */
+.sticky{display:none}
+@media (max-width:900px){
+  .sticky{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:90;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 18px;border-radius:22px;background:var(--c201C16);box-shadow:0 24px 50px -16px rgba(0,0,0,.6),inset 0 0 0 1px var(--line2);transform:translateY(calc(100% + 30px));visibility:hidden;transition:transform .5s var(--ease),visibility 0s .5s}
+  .sticky.on{transform:none;visibility:visible;transition:transform .5s var(--ease)}
+  .sticky .st{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .sticky .st b{font:400 20px/1.2 Boldonse,sans-serif}
+  .sticky .st small{font:400 12.5px/1.25 Inter;color:var(--mute);white-space:nowrap}
+  .sticky .btn{height:48px;padding-left:18px;font-size:11px;gap:10px}
+  .sticky .btn .arw{width:32px;height:32px}
+  .bens{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ben{min-height:0}
+  .cmp,.factsw{grid-template-columns:minmax(0,1fr)}
+  .label{order:2}
+  .bar span:nth-child(n+3){display:none}
+  .bar{letter-spacing:.08em;font-size:10.5px}
+}
+@media (max-width:560px){
+  .sticky .st small span{display:none}
+  .bens{grid-template-columns:minmax(0,1fr)}
+  .tile,.bento .tile:nth-child(2){grid-column:span 2;min-height:0}
+  .tile{flex-direction:row;align-items:flex-start;gap:18px}
+  .tile.big{flex-direction:column;align-items:stretch}
+  .tile:not(.big) svg{flex:none;width:32px}
+}
+/* Light theme, white film: the bottle close-up sits behind the logo on phones, so frost the header there */
+@media (max-width:760px){html[data-theme="light"]:not(.film-dark) header:not(.up){background:rgba(250,246,238,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}}
+</style>
 </head>
 <body>
 <canvas id="gl" aria-hidden="true"></canvas>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="arw" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
 
-<div class="bar">Free US shipping on $70+ · 30-day money-back guarantee · Subscribe &amp; save up to 20%</div>
+<div class="bar" id="bar"></div>
 <header id="hdr">
   <div class="in">
     <img class="logo" src="assets/nzt48-logo-2026.svg" alt="NZT-48">
     <nav aria-label="Page">
-      <a href="#shop" data-scroll>Shop</a>
-      <a href="#inside" data-scroll>What's inside</a>
-      <a href="#routine" data-scroll>How to take it</a>
-      <a href="#uses" data-scroll>Made for</a>
-      <a href="#faq" data-scroll>FAQ</a>
+      <a href="#benefits" data-scroll data-c="benefits.eyebrow"></a>
+      <a href="#routine" data-scroll data-c="routine.eyebrow"></a>
+      <a href="#uses" data-scroll data-c="uses.eyebrow"></a>
+      <a href="#facts" data-scroll data-c="facts.h"></a>
+      <a href="#faq" data-scroll data-c="faq.eyebrow"></a>
     </nav>
     <div class="act">
       <button class="ibtn cartbtn" id="cartbtn" aria-label="Open cart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><b>1</b></button>
-      <a class="btn pri" href="#shop" data-scroll>Shop<span class="wide-only">&nbsp;NZT48</span><i class="arw"><svg width="14" height="14"><use href="#arw"/></svg></i></a>
+      <a class="btn pri" href="#shop" data-scroll><span id="hdrshop"></span><i class="arw"><svg width="14" height="14"><use href="#arw"/></svg></i></a>
     </div>
   </div>
 </header>
 
 <main>
   <section class="hero" data-section="hero">
-    <video id="herofilm" autoplay muted loop playsinline preload="auto" aria-label="NZT48 Original brand film"></video>
+    <video id="herofilm" muted loop playsinline preload="auto" aria-label="NZT48 Original brand film"></video>
     <div class="card">
       <div class="txt">
-        <div class="titlerow"><h1 class="bebas">NZT48 Original</h1>
-          <span class="rating" aria-label="Rated 4.9 out of 5"><span class="r1"><i aria-hidden="true" id="stars"></i><b id="ratingval">4.9</b></span><span class="r2" id="ratingtxt">5,100+ reviews</span></span></div>
-        <p>The Limitless Pill. A once-daily nootropic capsule with the 750mg NZT-48™ Blend.*</p>
+        <div class="titlerow"><span class="pname" data-c="hero.name"></span>
+          <a class="rating" id="rating" target="_blank" rel="noopener"><span class="r1"><i aria-hidden="true" id="stars"></i><b id="ratingval"></b></span><span class="r2" id="ratingtxt"></span></a></div>
+        <h1 class="bebas" data-c="hero.h1"></h1>
+        <p data-c="hero.support"></p>
       </div>
-      <span class="from">From<b id="herofrom">$47.96</b></span>
-      <a class="btn pri" href="#shop" data-scroll>Build your supply<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
+      <span class="from">From<b id="herofrom"></b></span>
+      <a class="btn pri" href="#shop" data-scroll><span data-c="cta.primary"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
     </div>
   </section>
 
@@ -398,49 +474,59 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
         <span class="hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg>Drag to turn</span>
       </div>
       <div class="panel">
-        <h2 class="bebas h2">Build your supply</h2>
-        <p class="lede" style="margin-top:-4px">Same capsule in every size. Bigger packages lower the price per capsule.</p>
+        <h2 class="bebas h2" data-c="buy.h"></h2>
+        <p class="lede" style="margin-top:-4px" data-c="bundles.lede"></p>
         <div class="seg" role="radiogroup" aria-label="Capsule count" id="seg"><span class="thumb" id="thumb"></span></div>
         <div class="row">
-          <div class="t"><b id="subtitle">Subscribe &amp; save</b><small>Skip, reschedule or cancel anytime</small></div>
-          <button class="switch" role="switch" id="subswitch" aria-label="Subscribe and save"></button>
+          <div class="t"><b id="subtitle"></b><small id="subsmall"></small></div>
+          <button class="switch" role="switch" id="subswitch" aria-labelledby="subtitle"></button>
         </div>
-        <div class="freq" role="radiogroup" aria-label="Delivery every" id="freq"></div>
+        <div class="freq" role="radiogroup" id="freq"></div>
         <div class="price">
           <div style="display:flex;flex-direction:column;gap:10px">
-            <div class="now"><b id="ptotal">$47.96</b><s id="pstrike"></s></div>
+            <div class="now"><b id="ptotal"></b><s id="pstrike"></s></div>
             <span class="per" id="pper"></span>
           </div>
           <span class="badge" id="psave" hidden></span>
         </div>
         <div class="ship"><div class="meter"><i id="shipbar"></i></div><span id="shiptxt"></span></div>
-        <button class="btn pri" id="add">Add to cart<i class="arw"><svg width="18" height="18"><use href="#arw"/></svg></i></button>
+        <button class="btn pri" id="add"><span data-c="cta.add"></span><i class="arw"><svg width="18" height="18"><use href="#arw"/></svg></i></button>
         <p class="fine" id="pdisc" style="margin:0"></p>
+        <p class="fine" style="margin:-12px 0 0" data-c="bundles.foot"></p>
       </div>
     </div>
   </section>
 
   <section class="podium" id="capsule" data-section="capsule">
-    <h2 class="bebas">One capsule is the whole serving.</h2>
-    <div class="anchor" data-3d="podium" role="img" aria-label="NZT48 bottle circled by ribbons: 750mg NZT-48 Blend, 23 ingredients, contains caffeine, one capsule a day, 30 servings per bottle, made in the USA, GMP-certified facility"></div>
-    <div class="cta"><a class="btn pri" href="#shop" data-scroll>Pick your size<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a></div>
+    <h2 class="bebas" data-c="oneCapsule.h"></h2>
+    <div class="anchor" data-3d="podium" role="img" id="podiumimg"></div>
+    <div class="cta"><a class="btn pri" href="#shop" data-scroll><span data-c="cta.primary"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a></div>
   </section>
 
   <section class="prism" id="spectrum" data-section="spectrum">
     <canvas class="beams" aria-hidden="true"></canvas>
     <div class="head">
-      <h2 class="bebas h2">One capsule. The full spectrum.</h2>
-      <p class="lede">Every part of the NZT-48™ Blend, gathered into a single gold capsule.</p>
+      <h2 class="bebas h2" data-c="v3.spectrum.h"></h2>
+      <p class="lede" data-c="v3.spectrum.lede"></p>
     </div>
     <div class="anchor" data-3d="pill" aria-hidden="true"></div>
+  </section>
+
+  <section class="sec" id="benefits" data-section="benefits">
+    <div class="shead">
+      <span class="eye" data-c="benefits.eyebrow"></span>
+      <h2 class="bebas h2" data-c="benefits.h"></h2>
+      <p class="lede" data-c="benefits.lede"></p>
+    </div>
+    <div class="bens" id="bens"></div>
   </section>
 
   <section class="sec" id="inside" data-section="inside">
     <div class="inside">
       <div class="intro">
-        <h2 class="bebas h2">23 ingredients. One capsule.</h2>
-        <p class="lede">The full NZT-48™ Blend is listed on the label. Point at any ingredient to see what it is. The gold ones include a short note on what the research looks at.</p>
-        <p class="fine" style="margin:0">It’s a proprietary blend, so the label lists the 750mg total, not each amount. Research summaries describe each ingredient on its own, usually at larger amounts.</p>
+        <h2 class="bebas h2" data-c="v3.inside.h"></h2>
+        <p class="lede" data-c="v3.inside.lede"></p>
+        <p class="fine" style="margin:0" data-c="ingredients.foot"></p>
       </div>
       <div class="tokens" id="tokens"><div class="hcard" id="hcard" role="dialog" aria-live="polite"></div></div>
     </div>
@@ -449,11 +535,11 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
   <section class="sec" id="routine" data-section="routine">
     <div class="steps">
       <div>
-        <h2 class="bebas h2">How to take it</h2>
-        <div class="stepper" role="tablist" aria-label="Steps"><span class="rail" aria-hidden="true"></span><span class="fill" aria-hidden="true"></span>
-          <button class="step" role="tab" aria-selected="true" data-i="0"><span class="icl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg></span><span class="n">01</span><span class="txt"><b>Take one capsule</b><p>With 8oz of water, preferably with a meal, or as directed by a healthcare professional.</p></span></button>
-          <button class="step" role="tab" aria-selected="false" data-i="1"><span class="icl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/><path d="M2 2l20 20"/></svg></span><span class="n">02</span><span class="txt"><b>Skip the extra caffeine</b><p>NZT48 Original already contains caffeine. The label says to avoid other caffeinated products, including coffee and energy drinks.</p></span></button>
-          <button class="step" role="tab" aria-selected="false" data-i="2"><span class="icl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="n">03</span><span class="txt"><b>Take it earlier in the day</b><p>Most people take it in the morning or with lunch, so the caffeine fits their day and their sleep.</p></span></button>
+        <h2 class="bebas h2" data-c="routine.h"></h2>
+        <div class="stepper" role="tablist" data-c-label="routine.eyebrow"><span class="rail" aria-hidden="true"></span><span class="fill" aria-hidden="true"></span>
+          <button class="step" role="tab" aria-selected="true" data-i="0"><span class="icl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg></span><span class="n">01</span><span class="txt"><b data-c="routine.steps.0.0"></b><p data-c="routine.steps.0.1"></p></span></button>
+          <button class="step" role="tab" aria-selected="false" data-i="1"><span class="icl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/><path d="M2 2l20 20"/></svg></span><span class="n">02</span><span class="txt"><b data-c="routine.steps.1.0"></b><p data-c="routine.steps.1.1"></p></span></button>
+          <button class="step" role="tab" aria-selected="false" data-i="2"><span class="icl"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span><span class="n">03</span><span class="txt"><b data-c="routine.steps.2.0"></b><p data-c="routine.steps.2.1"></p></span></button>
         </div>
       </div>
       <div class="shots" id="shots">
@@ -466,65 +552,112 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
 
   <section class="sec" id="uses" data-section="uses">
     <div class="chead">
-      <h2 class="bebas h2">Made for demanding days</h2>
+      <h2 class="bebas h2" data-c="uses.h"></h2>
       <div class="cnav"><button class="ibtn" id="cprev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 6l-6 6 6 6"/></svg></button><button class="ibtn" id="cnext" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></button></div>
     </div>
     <div class="track" id="track"></div>
-    <p class="fine" style="margin:16px 0 0">For adults 18+. Everyone responds differently, and NZT48 is one part of a routine that also includes sleep, food and movement.</p>
+    <p class="fine" style="margin:16px 0 0" data-c="uses.foot"></p>
+  </section>
+
+  <section class="sec" id="compare" data-section="compare">
+    <div class="shead">
+      <span class="eye" data-c="compare.eyebrow"></span>
+      <h2 class="bebas h2" data-c="compare.h"></h2>
+      <p class="lede" data-c="compare.lede"></p>
+    </div>
+    <div class="cmp" id="cmp"></div>
+    <p class="fine" style="margin:20px 0 0;max-width:110ch" data-c="compare.foot"></p>
   </section>
 
   <section class="sec" id="standards" data-section="standards">
-    <h2 class="bebas h2">Made to a standard</h2>
+    <h2 class="bebas h2" data-c="v3.standards.h"></h2>
     <div class="bento">
-      <div class="tile big"><img src="assets/photos/r-diagonal.webp" alt="" loading="lazy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 8 2a6 6 0 0 0 3.6-1.2 1 1 0 0 1 1.4.8v9.4a1 1 0 0 1-.4.8A6 6 0 0 1 16 15c-3 0-5-2-8-2a6 6 0 0 0-4 1.5"/></svg><div><b>Made in the USA</b><span>Produced in the United States.</span></div></div>
-      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.7 9a1 1 0 0 1-.7 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.2-2.7a1.2 1.2 0 0 1 1.6 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M9 12l2 2 4-4"/></svg><div><b>GMP-certified facility</b><span>Made in a facility that follows Good Manufacturing Practices.</span></div></div>
-      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg><div><b>Fully listed blend</b><span>All 23 ingredients are printed on the label.</span></div></div>
-      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg><div><b>One capsule a day</b><span>The labeled serving is a single capsule.</span></div></div>
-      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.8 9.8 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><div><b>30-day guarantee</b><span>Covered by our Returns Policy.</span></div></div>
+      <div class="tile big"><img src="assets/photos/r-diagonal.webp" alt="" loading="lazy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.5 20.5a5 5 0 0 1-7-7l10-10a5 5 0 0 1 7 7z"/><path d="M8.5 8.5l7 7"/></svg><div><b data-c="v3.standards.tiles.0.0"></b><span data-c="v3.standards.tiles.0.1"></span></div></div>
+      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 12h6M9 16h6"/></svg><div><b data-c="v3.standards.tiles.1.0"></b><span data-c="v3.standards.tiles.1.1"></span></div></div>
+      <div class="tile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z"/><path d="M6 2v2M10 2v2M14 2v2"/></svg><div><b data-c="v3.standards.tiles.2.0"></b><span data-c="v3.standards.tiles.2.1"></span></div></div>
+      <a class="tile" id="rettile" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.8 9.8 0 0 0-6.7 2.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><div><b data-c="v3.standards.tiles.3.0"></b><span data-c="v3.standards.tiles.3.1"></span></div></a>
+    </div>
+    <p class="fine" style="margin:16px 0 0;max-width:110ch" data-c="guarantee.body"></p>
+  </section>
+
+  <section class="sec" id="facts" data-section="facts">
+    <div class="factsw">
+      <figure class="label" aria-labelledby="sfh">
+        <div class="lt" id="sfh">Supplement Facts</div>
+        <div class="ls">Serving Size <span data-c="facts.servingSize"></span><br>Servings Per Container <span data-c="facts.servings"></span></div>
+        <div class="lr9"></div>
+        <div class="lh"><span>Amount Per Capsule</span><span>% Daily Value**</span></div>
+        <div class="lr4"></div>
+        <div class="lb"><span data-c="facts.blendName"></span><span data-c="facts.blendAmt"></span><span>†</span></div>
+        <p class="lbl" id="blendlist"></p>
+        <div class="lr9"></div>
+        <p class="lsm" data-c="facts.dv"></p>
+        <p class="lsm"><strong>Other Ingredients:</strong> <span data-c="facts.other"></span></p>
+        <p class="lsm"><strong>Allergy Information:</strong> <span data-c="facts.allergy"></span></p>
+      </figure>
+      <div class="fside">
+        <span class="eye" data-c="facts.eyebrow"></span>
+        <h2 class="bebas h2" data-c="facts.h"></h2>
+        <p class="lede" data-c="facts.lede"></p>
+        <dl class="fdl">
+          <dt>Directions</dt><dd data-c="facts.directions"></dd>
+          <dt>Warning</dt><dd id="fwarn"></dd>
+        </dl>
+        <p class="fine" style="margin:0" id="ffda"></p>
+      </div>
     </div>
   </section>
 
   <section class="sec" id="faq" data-section="faq">
     <div class="faq">
       <div class="intro">
-        <h2 class="bebas h2">Questions, answered</h2>
-        <p class="lede">Straight answers on ingredients, caffeine, sizes and subscriptions.</p>
-        <a class="btn ghost" href="#shop" data-scroll>Build your supply<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
+        <h2 class="bebas h2" data-c="faq.h"></h2>
+        <p class="lede" data-c="faq.lede"></p>
+        <a class="btn ghost" href="#shop" data-scroll><span data-c="cta.primary"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
       </div>
-      <div class="qs" id="qs"></div>
+      <div>
+        <div class="qs" id="qs"></div>
+        <p class="fine" style="margin:20px 0 0" data-c="faq.health"></p>
+      </div>
     </div>
   </section>
 
   <section class="sec final" data-section="final">
-    <video autoplay muted loop playsinline src="assets/nzt48-floating-alpha.webm" aria-label="NZT48 bottle floating"></video>
-    <h2 class="bebas">Start with one capsule.</h2>
+    <video id="finalfilm" muted loop playsinline src="assets/nzt48-floating-alpha.webm" aria-label="NZT48 bottle floating"></video>
+    <h2 class="bebas" data-c="final.h"></h2>
+    <p class="lede" style="text-align:center" data-c="final.body"></p>
     <div class="btns">
-      <a class="btn pri" href="#shop" data-scroll>Shop now<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
-      <a class="btn sec2" href="#faq" data-scroll>Read the FAQ<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
+      <a class="btn pri" href="#shop" data-scroll><span data-c="cta.primary"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
+      <a class="btn sec2" href="#faq" data-scroll><span data-c="cta.faq"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="cols">
-    <div><img class="wm" src="assets/nzt48-logo-2026.svg" alt="NZT-48"><p>NZT48 Original, The Limitless Pill. A once-daily nootropic dietary supplement.</p></div>
-    <div><h4>Shop</h4><a href="#shop" data-scroll>30 capsules</a><a href="#shop" data-scroll>60 capsules</a><a href="#shop" data-scroll>90 capsules</a></div>
-    <div><h4>Learn</h4><a href="#inside" data-scroll>Ingredients</a><a href="NZT48%20V2%20-%20Magazine.dc.html#facts">Supplement facts</a><a href="#faq" data-scroll>FAQ</a></div>
-    <div><h4>Support</h4><a href="../../pages/returns-exchanges/index.html">Returns policy</a><a href="/policies/privacy-policy">Privacy</a><a href="/policies/terms-of-service">Terms</a></div>
+    <div><img class="wm" src="assets/nzt48-logo-2026.svg" alt="NZT-48"><p data-c="footer.blurb"></p></div>
+    <div><h4>Shop</h4><span id="fshop"></span></div>
+    <div><h4>Learn</h4><a href="#inside" data-scroll data-c="v3.inside.h"></a><a href="#facts" data-scroll data-c="facts.h"></a><a href="#faq" data-scroll data-c="faq.h"></a></div>
+    <div><h4>Support</h4><a id="fret" target="_blank" rel="noopener" data-c="guarantee.link"></a><a href="https://www.limitlessx.com/policies/privacy-policy" target="_blank" rel="noopener">Privacy</a><a href="https://www.limitlessx.com/policies/terms-of-service" target="_blank" rel="noopener">Terms</a></div>
     <p class="legal" id="fda"></p>
     <p class="legal" id="warn"></p>
-    <p class="legal">“The Limitless Pill” is a Limitless X campaign name for NZT48 Original. NZT48 is not affiliated with, sponsored by or endorsed by any film, television production, studio or actor. Individual results vary. © 2026 Limitless X</p>
+    <p class="legal"><span data-c="footer.legal"></span> © 2026 Limitless X</p>
   </div>
   <img class="giant" src="assets/nzt48-logo-2026.svg" alt="" aria-hidden="true">
 </footer>
 
+<div class="sticky" id="sticky" aria-hidden="true">
+  <div class="st"><b id="stline"></b><small id="stper"></small></div>
+  <button class="btn pri" id="stadd" tabindex="-1"><span data-c="cta.add"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></button>
+</div>
+
 <div id="lb" aria-hidden="true">
   <div class="scrim" data-lbclose></div>
-  <div class="box" role="dialog" aria-modal="true" aria-label="Demanding day">
+  <div class="box" role="dialog" aria-modal="true" data-c-label="uses.h">
     <button class="ibtn x" data-lbclose aria-label="Close"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 2l10 10M12 2L2 12"/></svg></button>
     <img id="lbimg" src="assets/photos/m-reading.webp" alt="">
     <div class="txt"><em id="lbwho"></em><h3 class="bebas" id="lbt"></h3><p class="lede" id="lbd"></p>
-      <div class="btns"><button class="ibtn" id="lbprev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 6l-6 6 6 6"/></svg></button><button class="ibtn" id="lbnext" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></button><a class="btn pri" href="#shop" data-scroll data-lbclose>Build your supply<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a></div>
+      <div class="btns"><button class="ibtn" id="lbprev" aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 6l-6 6 6 6"/></svg></button><button class="ibtn" id="lbnext" aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></button><a class="btn pri" href="#shop" data-scroll data-lbclose><span data-c="cta.primary"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></a></div>
     </div>
   </div>
 </div>
@@ -540,13 +673,15 @@ html[data-theme="light"] .tile.big svg{color:#A9B8FF}</style>
   <aside role="dialog" aria-label="Cart">
     <span class="grab"></span>
     <div style="display:flex;justify-content:space-between;align-items:center"><span class="bebas" style="font-size:22px">Your cart</span><button class="ibtn" data-close aria-label="Close cart"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 2l10 10M12 2L2 12"/></svg></button></div>
-    <div class="row"><div class="t"><b>Subscribe &amp; save</b><small id="csubsmall"></small></div><button class="switch" role="switch" id="csub" aria-label="Subscribe and save"></button></div>
+    <div class="row"><div class="t"><b id="csubtitle"></b><small id="csubsmall"></small></div><button class="switch" role="switch" id="csub" aria-labelledby="csubtitle"></button></div>
     <div class="sizes" id="csizes"></div>
-    <div class="freq" role="radiogroup" aria-label="Delivery every" id="cfreqs"></div>
+    <div class="freq" role="radiogroup" id="cfreqs"></div>
+    <div class="cfoot">
     <div class="tot"><span id="cline" style="font:500 13px/1.4 Inter;color:var(--mute)"></span><b id="ctotal"></b></div>
     <small class="fine" id="cdisc"></small>
-    <button class="btn pri" id="ccheckout">Secure checkout<i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></button>
+    <button class="btn pri" id="ccheckout"><span data-c="cta.checkout"></span><i class="arw"><svg width="16" height="16"><use href="#arw"/></svg></i></button>
     <div class="note" id="cnote" hidden>Preview build: checkout is turned off. On the live store this button sends the selected variant and subscription plan to Shopify checkout.</div>
+    </div>
   </aside>
 </div>
 
@@ -559,6 +694,17 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const hover = matchMedia('(hover:hover)');
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 gsap.registerPlugin(ScrollTrigger);
+
+/* ---------- Copy: every customer-facing string comes from NZT48.D.copy (the approved master) ---------- */
+const C = window.NZT48.D.copy;
+const pick = path => path.split('.').reduce((o, k) => o == null ? o : o[k], C);
+$$('[data-c]').forEach(el => { const v = pick(el.dataset.c); if (typeof v === 'string') el.textContent = v; else console.warn('Missing copy:', el.dataset.c); });
+$$('[data-c-label]').forEach(el => el.setAttribute('aria-label', pick(el.dataset.cLabel)));
+const bar = $('#bar'); C.announce.forEach(t => bar.appendChild(document.createElement('span')).textContent = t);
+{ const [first, ...rest] = C.cta.shop.split(' '); $('#hdrshop').textContent = first; $('#hdrshop').insertAdjacentHTML('beforeend', '<span class="wide-only"></span>'); $('#hdrshop .wide-only').textContent = '\u00a0' + rest.join(' '); }
+// hero fills the first screen below the announcement bar, so its CTA is above the fold
+const setBar = () => document.documentElement.style.setProperty('--barh', bar.offsetHeight + 'px');
+setBar(); addEventListener('resize', setBar);
 
 /* ---------- Smooth scroll (Lenis) wired into GSAP ---------- */
 let lenis = null;
@@ -576,7 +722,7 @@ const scrollTo = (target) => { // absolute target from the live page position, s
 document.addEventListener('click', e => { const a = e.target.closest('[data-scroll]'); if (!a) return; e.preventDefault(); closeLb(); scrollTo(a.getAttribute('href')); });
 
 const hdr = $('#hdr');
-ScrollTrigger.create({ start: 30, end: 'max', onToggle: s => hdr.classList.toggle('up', s.isActive) });
+ScrollTrigger.create({ start: () => bar.offsetHeight, end: 'max', onToggle: s => hdr.classList.toggle('up', s.isActive) });
 /* Hero film: landscape cut on wide screens, portrait cut on tall ones */
 const film = $('#herofilm'), filmMQ = matchMedia('(max-aspect-ratio: 4/5), (max-width: 760px)');
 // light theme uses the white cuts
@@ -585,9 +731,10 @@ const pickFilm = () => {
   const theme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark', shape = filmMQ.matches ? 'portrait' : 'landscape';
   const name = FILMS[theme][shape] || FILMS.dark[shape], src = 'assets/nzt48-film-' + name + '.mp4';
   document.documentElement.classList.toggle('film-dark', !name.endsWith('white'));
-  if (!film.src.endsWith(src)) { film.src = src; film.play().catch(() => {}); }
+  if (!film.src.endsWith(src)) { film.src = src; if (!reduce) film.play().catch(() => {}); } // reduced motion: first frame only
 };
 pickFilm(); filmMQ.addEventListener('change', pickFilm);
+if (!reduce) $('#finalfilm').play().catch(() => {});
 new MutationObserver(pickFilm).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 // hero film plays untouched: no filter, no zoom, no parallax
 const lock = on => lenis && (on ? lenis.stop() : lenis.start());
@@ -617,36 +764,50 @@ function render() {
   $$('button', seg).forEach((b, j) => { b.setAttribute('aria-checked', j === i); b.tabIndex = j === i ? 0 : -1; });
   $('#bigcount').textContent = s.key;
   [$('#subswitch'), $('#csub')].forEach(b => b.setAttribute('aria-checked', V.isSub));
-  $('#subtitle').textContent = V.isSub ? V.subLabel : 'Subscribe & save up to 20%';
-  [freqEl, $('#cfreqs')].forEach(f => { f.hidden = !V.isSub; f.innerHTML = freqHtml(); $$('button', f).forEach(b => b.onclick = () => V.freqs[+b.dataset.i].pick()); });
+  $('#subtitle').textContent = $('#csubtitle').textContent = V.isSub ? V.subLabel : C.plans.subH;
+  $('#subsmall').textContent = V.isSub ? C.buy.subSmall : C.plans.subRates;
+  [freqEl, $('#cfreqs')].forEach(f => { f.hidden = !V.isSub; f.setAttribute('aria-label', C.buy.every); f.innerHTML = freqHtml(); $$('button', f).forEach(b => b.onclick = () => V.freqs[+b.dataset.i].pick()); });
   $('#ptotal').textContent = V.sel.total;
   $('#pstrike').textContent = V.sel.hasStrike ? V.sel.singles : '';
   $('#pper').textContent = `${V.sel.perCap} per capsule · ${V.sel.title}, ${V.sel.supply}`;
   const sv = $('#psave'); sv.hidden = !V.sel.hasStrike; sv.textContent = `Save ${V.sel.save} · ${V.sel.savePct}%`;
   $('#shipbar').style.transform = `scaleX(${Math.min(1, N.calc(s.key, V.isSub ? 'sub' : 'once', V.sel.freq).total / 70)})`;
-  $('#shiptxt').innerHTML = V.shipOn ? '<span class="ship-ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F2B322" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg>Free US shipping unlocked</span>' : `${V.shipAway} away from free US shipping`;
+  $('#shiptxt').innerHTML = V.shipOn ? `<span class="ship-ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:var(--gold)"><path d="M5 12l5 5 9-10"/></svg>${C.buy.shipOn}</span>` : C.buy.shipAway.replace('{amount}', V.shipAway);
   $('#pdisc').textContent = V.disclosure;
   $('#csizes').innerHTML = V.sizes.map((x, j) => `<button data-i="${j}" class="${x.sel ? 'on' : ''}"><span>${x.caps} · ${x.supply}</span><span>${x.total}</span></button>`).join('');
   $$('#csizes button').forEach(b => b.onclick = () => V.sizes[+b.dataset.i].pick());
-  $('#csubsmall').textContent = V.isSub ? V.subLabel + ' · cancel anytime' : 'Off · one-time purchase';
+  $('#csubsmall').textContent = V.isSub ? C.buy.subSmall : C.buy.once;
   $('#cline').textContent = `${V.sel.caps} · ${V.sel.perCap} per capsule · Shipping: ${V.cart.ship}`;
   $('#ctotal').textContent = V.sel.total;
   $('#cdisc').textContent = V.disclosure;
   $('#cnote').hidden = !V.notice;
   $('#ccheckout').onclick = V.checkout;
+  $('#stline').textContent = V.sel.total;
+  $('#stper').textContent = V.sel.caps; $('#stper').appendChild(document.createElement('span')).textContent = ` · ${V.sel.perCap} per capsule`;
   stageCount = +s.key / 30;
 }
 
 /* Add to cart → toast; cart drawer from toast or header */
 const cartEl = $('#cart'), toast = $('#toast'); let toastT;
+const addToCart = () => { N.track('AddToCart', { variant: N.V.find(x => x.key === V.sizes.find(s => s.sel).key).id, plan: V.isSub ? 'sub' : 'once', value: N.calc(V.sizes.find(s => s.sel).key, V.isSub ? 'sub' : 'once', V.sel.freq).total, currency: 'USD' }); $('#cartbtn').classList.add('has'); };
 $('#add').onclick = () => {
-  N.track('AddToCart', { variant: N.V.find(x => x.key === V.sizes.find(s => s.sel).key).id, plan: V.isSub ? 'sub' : 'once' });
-  $('#cartbtn').classList.add('has');
+  addToCart();
   $('#toasttxt').innerHTML = `Added to cart<small>${V.sel.caps} · ${V.isSub ? V.subLabel : 'One-time'} · ${V.sel.total}</small>`;
   toast.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toast.classList.remove('on'), 5000);
 };
-function openCart() { toast.classList.remove('on'); cmp.state.notice = false; render(); cartEl.classList.add('open'); cartEl.setAttribute('aria-hidden', 'false'); requestAnimationFrame(() => cartEl.classList.add('show')); lock(true); $('#ccheckout').focus({ preventScroll: true }); }
-function closeCart() { cartEl.classList.remove('show'); setTimeout(() => cartEl.classList.remove('open'), 450); cartEl.setAttribute('aria-hidden', 'true'); lock(false); }
+function openCart() { toast.classList.remove('on'); cmp.state.notice = false; render(); cartEl.classList.add('open'); cartEl.setAttribute('aria-hidden', 'false'); requestAnimationFrame(() => cartEl.classList.add('show')); lock(true); $('#ccheckout').focus({ preventScroll: true }); syncSticky(); }
+function closeCart() { if (!cartEl.classList.contains('open')) return; cartEl.classList.remove('show'); setTimeout(() => { cartEl.classList.remove('open'); syncSticky(); }, 450); cartEl.setAttribute('aria-hidden', 'true'); lock(false); }
+
+/* Mobile sticky buy bar: shows once the hero is gone, hides while the configurator or the cart is on screen */
+const sticky = $('#sticky'), seen = { hero: true, shop: false };
+function syncSticky() {
+  const on = innerWidth < 900 && !seen.hero && !seen.shop && !cartEl.classList.contains('open');
+  sticky.classList.toggle('on', on); sticky.setAttribute('aria-hidden', !on); $('#stadd').tabIndex = on ? 0 : -1;
+}
+new IntersectionObserver(es => { es.forEach(e => seen[e.target.id === 'shop' ? 'shop' : 'hero'] = e.isIntersecting); syncSticky(); }).observe($('.hero'));
+new IntersectionObserver(es => { es.forEach(e => seen.shop = e.isIntersecting); syncSticky(); }).observe($('#shop'));
+addEventListener('resize', syncSticky);
+$('#stadd').onclick = () => { addToCart(); openCart(); };
 $('#toastview').onclick = $('#cartbtn').onclick = openCart;
 $$('[data-close]', cartEl).forEach(b => b.onclick = closeCart);
 
@@ -705,23 +866,7 @@ function drawPrism(t) {
 }
 gsap.ticker.add(() => drawPrism(performance.now() / 1000));
 
-/* ---------- Ingredients: every token opens a card ---------- */
-// Plain "what it is" notes for the rest of the blend (identity only, no benefit claims)
-const WHAT = {
-  'EGCG': 'A catechin found in green tea.',
-  '5HTP': '5-hydroxytryptophan, an amino acid the body makes from tryptophan.',
-  'Theobromine': 'A compound found in cacao, chemically related to caffeine.',
-  'Benfotiamine': 'A fat-soluble form of vitamin B1 (thiamine).',
-  'DL Phenylalanine': 'A mix of the D and L forms of the amino acid phenylalanine.',
-  'Acetyl-L-carnitine': 'An acetylated form of the amino acid L-carnitine.',
-  'N-acetyl-L-tyrosine (NALT)': 'An acetylated form of the amino acid L-tyrosine.',
-  'NADH': 'The reduced form of NAD, a coenzyme made from vitamin B3.',
-  'Uridine-5 Monophosphate': 'A nucleotide, one of the building blocks of RNA.',
-  'B-Complex': 'A group of B vitamins.',
-  'Mucuna Pruriens 99% Ext': 'An extract of velvet bean seeds, a natural source of L-DOPA.',
-  'Rauwolcine': 'An alkaloid from Rauwolfia plants, related to yohimbine.',
-  'Piperine': 'The compound that gives black pepper its bite.'
-};
+/* ---------- Ingredients: every token opens a card (key ones: research + what we can say; the rest: D.notes identity only) ---------- */
 const tokens = $('#tokens'), hcard = $('#hcard');
 const keyFor = name => D.ingredients.find(g => g.name.split(' + ').some(p => name.toLowerCase().startsWith(p.toLowerCase().split(' ')[0])));
 tokens.insertAdjacentHTML('afterbegin', D.blend.map((n, i) => `<button class="tok${keyFor(n) ? ' key' : ''}" data-i="${i}" aria-expanded="false" aria-controls="hcard">${n}</button>`).join(''));
@@ -729,7 +874,8 @@ let cardFor = null;
 function showCard(btn) {
   const n = D.blend[+btn.dataset.i], g = keyFor(n), idx = String(+btn.dataset.i + 1).padStart(2, '0');
   $$('.tok', tokens).forEach(b => b.setAttribute('aria-expanded', b === btn));
-  hcard.innerHTML = `<div class="top"><span>${g ? g.what : 'In the blend'}</span><span>${idx} / 23</span></div><div class="body"><b>${n}</b>${g ? `<p>${g.research}</p><p class="say">${g.say}</p>` : `<p class="say">${WHAT[n] || ''}</p><p>One of 23 ingredients in the 750mg NZT-48™ Blend.</p>`}</div>`;
+  const I = C.ingredients;
+  hcard.innerHTML = `<div class="top"><span>${g ? g.what : I.partOf}</span><span>${idx} / ${D.blend.length}</span></div><div class="body"><b>${n}</b>${g ? `<p><span class="hl">${I.researchLabel}</span>${g.research}</p><p class="say"><span class="hl">${I.sayLabel}</span>${g.say}</p>` : `<p class="say">${D.notes[n] || ''}</p>`}</div>`;
   const tr = tokens.getBoundingClientRect(), br = btn.getBoundingClientRect();
   const w = Math.min(380, tr.width), left = Math.max(0, Math.min(br.left - tr.left, tr.width - w));
   hcard.style.left = left + 'px'; hcard.style.top = (br.bottom - tr.top + 10) + 'px';
@@ -764,7 +910,8 @@ const track = $('#track');
 track.innerHTML = days.map((u, i) => `<button class="day" data-i="${i}" aria-label="${u.t}: open"><img src="${u.img}" alt="${u.t} with NZT48 Original" loading="lazy" draggable="false"><span class="open" aria-hidden="true"><svg width="14" height="14"><use href="#arw"/></svg></span><span class="cap"><em>${u.who}</em><b>${u.t}</b></span></button>`).join('');
 const cards = $$('.day', track), imgs = cards.map(c => $('img', c));
 const GAP = 28, EASE_MOVE = 'power3.inOut', EASE_THROW = 'expo.out', EASE_PAUSE = 'power2.out';
-const car = { x: 0, speed: reduce ? 0 : 1 }; // x = offset in px; speed = drift multiplier (eased to 0 on hover)
+const still = () => reduce || innerWidth < 900; // phones: swipe/arrows only, cards rest on the grid
+const car = { x: 0, speed: still() ? 0 : 1 }; // x = offset in px; speed = drift multiplier (eased to 0 on hover)
 let step = 0, total = 0, startX = 0, tween = null, moved = 0;
 function measure() {
   step = cards[0].offsetWidth + GAP; total = step * cards.length;
@@ -788,7 +935,7 @@ $('#cprev').onclick = () => snapTo(nearest(car.x) + step, .8, EASE_MOVE);
 $('#cnext').onclick = () => snapTo(nearest(car.x) - step, .8, EASE_MOVE);
 track.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') $('#cprev').click(); if (e.key === 'ArrowRight') $('#cnext').click(); });
 // hover / focus: drift eases down instead of stopping dead
-const setDrift = v => gsap.to(car, { speed: reduce ? 0 : v, duration: .6, ease: EASE_PAUSE, overwrite: 'auto' });
+const setDrift = v => gsap.to(car, { speed: still() ? 0 : v, duration: .6, ease: EASE_PAUSE, overwrite: 'auto' });
 track.addEventListener('pointerenter', e => e.pointerType === 'mouse' && setDrift(0));
 track.addEventListener('pointerleave', () => setDrift(1));
 track.addEventListener('focusin', () => setDrift(0)); track.addEventListener('focusout', () => setDrift(1));
@@ -838,12 +985,21 @@ addEventListener('keydown', e => {
 
 /* ---------- FAQ ---------- */
 $('#qs').innerHTML = D.faq.map((f, i) => `<details${i === 0 ? ' open' : ''}><summary>${f[0]}<i aria-hidden="true"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 1v10M1 6h10"/></svg></i></summary><p>${f[1]}</p></details>`).join('');
-$('#fda').textContent = D.fda; $('#warn').textContent = 'Warning: ' + D.warning;
+$('#fda').textContent = $('#ffda').textContent = D.fda; $('#warn').textContent = 'Warning: ' + D.warning; $('#fwarn').textContent = D.warning;
 $('#ratingtxt').textContent = `${D.reviews.count} reviews`; $('#ratingval').textContent = D.reviews.rating;
+const rating = $('#rating'); rating.href = D.reviewsUrl; rating.setAttribute('aria-label', `${D.reviews.rating} out of 5. ${C.reviews.line.replace('{count}', D.reviews.count)}`);
+$('#fret').href = $('#rettile').href = D.returnsUrl;
+$('#blendlist').textContent = D.blend.join(', ');
+$('#fshop').innerHTML = N.V.map(x => `<a href="#shop" data-scroll data-k="${x.key}">${x.caps}</a>`).join('');
+$$('#fshop a').forEach(a => a.addEventListener('click', () => V.sizes.find(s => s.key === a.dataset.k).pick()));
+/* Benefits + comparison, from D.benefits / D.compare */
+$('#bens').innerHTML = D.benefits.map(b => `<article class="ben"><span class="n bebas">${b.n}</span><b>${b.t}</b><p>${b.d}</p></article>`).join('');
+const PILL = '<svg width="16" height="40" viewBox="0 0 46 118" aria-hidden="true"><rect x="1" y="1" width="44" height="116" rx="22" fill="currentColor"/><path d="M1 59h44v36a22 22 0 0 1-44 0z" fill="#000" opacity=".22"/></svg>';
+$('#cmp').innerHTML = D.compare.map(r => `<article class="cmpc${r.us ? ' us' : ''}"><div class="pills" aria-label="${r.caps} per serving">${PILL.repeat(+r.caps)}<b>× ${r.caps}</b></div><div><div class="bn">${r.brand}</div><small>${r.maker}</small></div><span class="nt">${r.note}</span></article>`).join('');
 $('#herofrom').textContent = N.money(N.calc('30', 'sub', 30).total);
 
 /* Gentle entrance for each section's content, from an already-visible state */
-$$('.sec').forEach(s => gsap.from(s.children, { y: 28, opacity: .001, duration: 1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: s, start: 'top 82%', once: true } }));
+if (!reduce) $$('.sec').forEach(s => gsap.from(s.children, { y: 28, opacity: .001, duration: 1, ease: 'expo.out', stagger: .08, scrollTrigger: { trigger: s, start: 'top 82%', once: true } }));
 
 render();
 N.utm(); N.track('PageView', { version: 'v3-cinematic' });
@@ -869,7 +1025,9 @@ function unitize(obj) { // wrap so the object's longest side is 1 unit, centred
 }
 
 /* Tags: small solid capsule-shaped blocks with glowing gold type, orbiting close around the bottle (ProSupps-style) */
-const TAGS = ['750mg blend', '23 ingredients', 'Caffeine', 'One a day', 'Made in USA'];
+// Orbit tags from the master copy (no Made in USA / GMP: unverified)
+const TAGS = [...C.trust[1].split(' · '), C.v3.standards.tiles[2][0], C.v3.standards.tiles[0][0]];
+$('#podiumimg').setAttribute('aria-label', `${C.oneCapsule.h}: ` + C.oneCapsule.stats.map(x => x.join(' ')).join(', ') + `, ${C.v3.standards.tiles[2][0].toLowerCase()}`);
 const TAG_H = .088, TAG_D = .042, ORBIT = { r: .34, tilt: .3, roll: .14, speed: .34 };
 function tagTexture(text) {
   const px = 64, h = 128, g = document.createElement('canvas').getContext('2d');
